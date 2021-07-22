@@ -30,18 +30,18 @@ ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest;${LUA_MODULE}
 
 IF (WIN32)
 ADD_CUSTOM_COMMAND(
-    TARGET dmtest
-    POST_BUILD
-    COMMAND dmgen4cpp --PKG=interface.pkg
+    TARGET dmsolpptest
+    PRE_BUILD
+    COMMAND dmsolpp --PKG=interface.pkg
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/dmsolpptest
-    DEPENDS dmtest
+    DEPENDS dmsolpptest
     )
 
 ADD_CUSTOM_COMMAND(
-    TARGET dmtest
+    TARGET dmsolpptest
     PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/config/lua_dkm_debug.json
-    $<TARGET_FILE_DIR:dmtest>
+    $<TARGET_FILE_DIR:dmsolpptest>
 )
 ENDIF(WIN32)
