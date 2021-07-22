@@ -5,6 +5,6 @@ do
     if test -f $file
     then
         echo checking $file
-        ./dmgen4cpp --PKG=$file
+        ./dmsolpp --PKG=$file
     fi
 done

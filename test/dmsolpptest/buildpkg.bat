@@ -1,2 +1,2 @@
 
-dmgen4cpp --PKG=interface.pkg
+dmsolpp --PKG=interface.pkg
