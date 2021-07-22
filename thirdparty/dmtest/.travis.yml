@@ -1,0 +1,102 @@
+# Build matrix / environment variable are explained on:
+# http://about.travis-ci.org/docs/user/build-configuration/
+# This file can be validated on: http://lint.travis-ci.org/
+
+sudo: false
+dist: trusty
+language: cpp
+
+compiler:
+  - gcc
+# - clang
+os:
+  - linux
+# - osx
+
+env:
+# - BUILD_TYPE=Debug
+  - BUILD_TYPE=RelWithDebInfo
+
+addons:
+  apt:
+    # List of whitelisted in travis packages for ubuntu-trusty can be found here:
+    #   https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-trusty
+    # List of whitelisted in travis apt-sources:
+    #   https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    sources:
+
+    packages:
+      - cmake
+#     - libtool
+      - autoconf
+      - automake 
+#     - gcc-7
+#     - g++-7
+#     - clang-5.0
+
+
+install:
+  - cmake --version
+
+before_install:
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" ] ; then
+        #brew update
+        #brew install libtool
+        echo osx
+    fi
+    if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
+        echo linux
+    fi
+
+before_script:
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" ] ; then
+        #glibtoolize
+        #aclocal
+        #autoheader
+        #autoconf
+        #automake --add-missing
+        #sh configure
+        echo osx
+    fi
+    if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
+        #libtoolize
+        #aclocal
+        #autoheader
+        #autoconf
+        #automake --add-missing
+        #sh configure
+        echo linux
+    fi
+
+script:
+  - mkdir -p build && cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  - cmake --build .
+  - cd ..
+
+after_success:
+  - "if [ -f bin/dmtesttest ] ; then bin/dmtesttest ; fi"
+
+after_failure:
+  - echo failure
+
+before_deploy:
+  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+  - echo deploy start
+
+deploy:
+  provider: releases
+  api_key:
+    secure: $GITHUB_ACCESS_TOKEN
+  file: bin/dmtesttest
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: false
+    all_branches: true
+    condition: $TRAVIS_OS_NAME == "linux" && $TRAVIS_COMMIT_MESSAGE == "BUILD_DEPLOY" && $BUILD_TYPE == "RelWithDebInfo"
+
+after_deploy:
+  - echo deploy end
