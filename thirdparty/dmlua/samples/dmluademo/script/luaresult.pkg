@@ -1,0 +1,31 @@
+$#include "dmlua_luaresult.h"
+$#include "dmtypes.h"
+
+
+struct LuaResult
+{
+    TOLUA_TEMPLATE_BIND(T, int, int64_t, uint64_t, double, std::string);
+
+    T value;
+
+    LuaResult();
+    ~LuaResult();
+};
+
+namespace std
+{
+    class vector
+    {
+        TOLUA_TEMPLATE_BIND(T, int, int64_t, uint64_t, double, std::string);
+
+        void clear();
+        int size() const;
+
+        const T& operator[](int index) const;
+        T& operator[](int index);
+        void push_back(T val);
+
+        vector();
+        ~vector();
+    };
+}

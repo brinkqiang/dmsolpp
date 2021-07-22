@@ -1,0 +1,11 @@
+
+$#include "dmlua_typeid.h"
+
+$pfile "luaresult.pkg"
+
+$cfile "../common/macros.h"
+$cfile "../common/enum.h"
+$cfile "../common/struct.h"
+
+$cfile "../role/role.h"
+$cfile "../role/rolemgr.h"

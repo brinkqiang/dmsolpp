@@ -20,6 +20,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmsolpp_config.h.in ${CMAKE_C
 
 ModuleImport("dmprotobuf" "thirdparty/dmprotobuf")
 ModuleImport("dmtest" "thirdparty/dmtest")
+ModuleImport("dmlua" "thirdparty/dmlua")
 
 LibImport("dmsolpp_module" "src/dmsolpp_module")
-ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest")
+ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest;tolua")
