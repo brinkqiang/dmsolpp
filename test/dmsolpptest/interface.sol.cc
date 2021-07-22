@@ -43,6 +43,8 @@ namespace lua_module_interface
             , sol::constructors<CCreature()>()
             , sol::meta_function::garbage_collect, sol::destructor([](CCreature& temp) { temp.~CCreature(); })
             , sol::base_classes, sol::bases<CObject>()
+            , "SetHP", &CCreature::SetHP
+            , "SetMP", &CCreature::SetMP
             , "GetHP", &CCreature::GetHP
             , "GetMP", &CCreature::GetMP
             

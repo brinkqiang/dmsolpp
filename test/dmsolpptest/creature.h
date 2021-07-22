@@ -11,6 +11,9 @@ public:
     CCreature(): m_llHP(0), m_llMP(0){}
     virtual ~CCreature(){}
 
+    void SetHP(int64_t HP){ m_llHP = HP;}
+    void SetMP(int64_t MP){ m_llMP = MP;}
+
     int64_t GetHP(){ return m_llHP;}
     int64_t GetMP(){ return m_llMP;}
 

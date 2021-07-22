@@ -21,6 +21,7 @@ TEST(DoSol, DoSol)
         print("[2]" .. p.NextID())
         p:SetObjID(GNextID())
         print("[3]" .. p:GetObjID())
+        p:SetHP(GNextID())
         print("[4]" .. p:GetHP())
         print("[5]" .. CPlayer.NextID())
         )", sol::script_throw_on_error);
