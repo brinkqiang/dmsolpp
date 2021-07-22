@@ -26,39 +26,3 @@ TEST(DoSol, DoSol)
         )", sol::script_throw_on_error);
     ASSERT_TRUE(script_result.valid());
 }
-
-TEST(DoAction, DoAction)
-{
-    //CPlayer oPlayer;
-
-    //oPlayer.Init();
-
-    //for (int i = 0; i < 10000; ++i)
-    //{
-    //    oPlayer.NotChange();
-    //}
-
-    //for (int i = 0; i < 10000; ++i)
-    //{
-    //    oPlayer.OnChange();
-    //}
-
-    //std::map<int, int> map;
-
-    //for (int i = 0; i < 100; i++)
-    //{
-    //    map[i] = i;
-    //}
-
-    //for (auto it = map.begin(); it != map.end();)
-    //{
-    //    if (it->first % 6 == 0)
-    //    {
-    //        map.erase(it++);
-    //    }
-    //    else
-    //    {
-    //        it++;
-    //    }
-    //}
-}
