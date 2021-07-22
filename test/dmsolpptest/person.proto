@@ -1,0 +1,57 @@
+// See README.txt for information and build instructions.
+//
+// Note: START and END tags are used in comments to define sections used in
+// tutorials.  They are not part of the syntax for Protocol Buffers.
+//
+// To get an in-depth walkthrough of this file and the related examples, see:
+// https://developers.google.com/protocol-buffers/docs/tutorials
+
+// [START declaration]
+syntax = "proto3";
+package db;
+
+message fd_task{
+  optional int32 task_id = 1;
+  optional int32 count = 2;
+  optional int32 state = 3;
+}
+
+message fd_item{
+  optional int32 tid = 1;
+  optional int32 count = 2;
+}
+// [START messages]
+message tb_person {
+  optional uint64 uuid = 1;
+  optional int32 job = 2;
+  optional string name = 3;
+  optional fd_item item = 19;
+  repeated fd_item item_list = 20;
+  map<uint64, fd_item> item_map = 21;
+}
+
+message fd_item_list {
+  repeated fd_item item_list_total = 9;
+  repeated fd_item item_list_add = 10;
+  repeated fd_item item_list_change = 11;
+  repeated fd_item item_list_del = 12;
+}
+
+message fd_item_map {
+  map<uint64, fd_item> item_map_total = 21;
+  map<uint64, fd_item> item_map_add = 22;
+  map<uint64, fd_item> item_map_change = 23;
+  map<uint64, fd_item> item_map_del = 24;
+}
+
+message tb_person_merge {
+  optional uint64 uuid = 1;
+  optional int32 job = 2;
+  optional string name = 3;
+
+  optional fd_item item = 19;
+  optional fd_item_list item_list = 20;
+  optional fd_item_map item_map = 21;
+}
+
+// [END messages]

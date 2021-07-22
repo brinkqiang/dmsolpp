@@ -1,0 +1,8 @@
+#include "object.h"
+#include "creature.h"
+#include "player.h"
+
+#include "common/types.h"
+#include "common/enum.h"
+#include "common/macros.h"
+#include "common/struct.h"
