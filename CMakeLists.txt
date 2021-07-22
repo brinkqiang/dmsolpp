@@ -16,11 +16,13 @@ SET(DMSOLPP_VERSION "${DMSOLPP_VERSION_MAJOR}.${DMSOLPP_VERSION_MINOR}.${DMSOLPP
 MESSAGE(STATUS "VERSION: ${DMSOLPP_VERSION}")
 
 OPTION(USE_DMSOLPP "use dmsolpp" OFF)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmsolpp_config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/dmsolpp_config.h)
+
+SET(LUA_MODULE lua54)
 
 ModuleImport("dmprotobuf" "thirdparty/dmprotobuf")
 ModuleImport("dmtest" "thirdparty/dmtest")
 ModuleImport("dmlua" "thirdparty/dmlua")
+ModuleInclude("dmlua" "thirdparty/dmlua/src/${LUA_MODULE}")
 
 LibImport("dmsolpp_module" "src/dmsolpp_module")
-ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest;tolua")
+ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest;${LUA_MODULE};tolua")
