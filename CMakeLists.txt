@@ -22,6 +22,7 @@ SET(LUA_MODULE lua54)
 ModuleImport("dmprotobuf" "thirdparty/dmprotobuf")
 ModuleImport("dmtest" "thirdparty/dmtest")
 ModuleImport("dmlua" "thirdparty/dmlua")
+ModuleImport("dmformat" "thirdparty/dmformat")
 ModuleInclude("dmlua" "thirdparty/dmlua/src/${LUA_MODULE}")
 
 LibImport("dmsolpp_module" "src/dmsolpp_module")

@@ -20,7 +20,7 @@
 // SOFTWARE.
 
 #include "dmsolpp_module.h"
-#include "dmlog.hpp"
+#include "dmformat.h"
 
 Cdmsolpp_module::Cdmsolpp_module()
 {
