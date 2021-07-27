@@ -1,6 +1,6 @@
 name: linux
 
-on: [push]
+on: [push, delete, create]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
