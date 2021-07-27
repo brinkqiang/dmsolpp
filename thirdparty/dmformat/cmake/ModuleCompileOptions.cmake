@@ -218,7 +218,6 @@ macro(ModuleSetWinCompilerFlags)
   ENDIF (WIN32)
 endmacro(ModuleSetWinCompilerFlags)
 
-
 MACRO(AddUninstallTarget)
 CONFIGURE_FILE(
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
