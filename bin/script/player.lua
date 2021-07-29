@@ -1,4 +1,5 @@
 module("interface", package.seeall)
+
 _M = {}
 
 function _M.create_player()
