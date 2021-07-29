@@ -1,5 +1,9 @@
 module("interface", package.seeall)
+_M = {}
 
-local p = CPlayer.new()
+function _M.create_player()
+    local p = CPlayer.new()
+    return p
+end
 
-return p
+return _M

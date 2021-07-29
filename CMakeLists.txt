@@ -30,13 +30,13 @@ LibImport("dmsolpp_module" "src/dmsolpp_module")
 ExeImport("test" "dmsolpp_module;libprotobuf-lite;libprotoc;dmtest;${LUA_MODULE};tolua")
 
 IF (WIN32)
-ADD_CUSTOM_COMMAND(
-    TARGET dmsolpptest
-    PRE_BUILD
-    COMMAND dmsolpp --PKG=interface.pkg
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/dmsolpptest
-    DEPENDS dmsolpptest
-    )
+#ADD_CUSTOM_COMMAND(
+#    TARGET dmsolpptest
+#    PRE_BUILD
+#    COMMAND dmsolpp --PKG=interface.pkg
+#    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/dmsolpptest
+#    DEPENDS dmsolpptest
+#    )
 
 ADD_CUSTOM_COMMAND(
     TARGET dmsolpptest

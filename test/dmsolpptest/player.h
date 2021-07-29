@@ -16,7 +16,7 @@ public:
     CPlayer(const std::string& strName);
     virtual ~CPlayer();
 
-    virtual void DoAction();
+    void DoAction();
 
     void Init();
     void OnChange();

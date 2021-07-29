@@ -1,7 +1,8 @@
 module("interface", package.seeall)
 
-local p = require("player")
+local player = require("player")
 
+local p = player.create_player()
 p:Init()
 p:NotChange()
 p:OnChange()
