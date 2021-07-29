@@ -51,6 +51,8 @@
 #include <sys/time.h>
 #endif
 
+#include "sol/sol.hpp"
+
 TOLUA_API int tolua_interface_open( lua_State* tolua_S );
 
 inline char* tolua_SafeStrCopy( char* des, const char* src, size_t max_len )
@@ -597,7 +599,6 @@ public:
         : m_pLuaS( luaL_newstate() ), m_dwStartTime( 0 ), m_bStartTime( false )
     {
         luaL_openlibs( m_pLuaS );
-        tolua_interface_open( m_pLuaS );
         AddPath("");
     }
 
@@ -634,6 +635,8 @@ public:
         return lua_gc( m_pLuaS, LUA_GCCOUNT, 0 ) * 1024L + lua_gc( m_pLuaS,
                 LUA_GCCOUNTB, 0 );
     }
+
+    sol::state_view GetSol(){ return sol::state_view(m_pLuaS); }
 
     lua_State* GetState()
     {
@@ -689,6 +692,11 @@ public:
         lua_pushfstring(m_pLuaS, "%s;%s/?.so", curPath, strPath.c_str());
 #endif
         lua_setfield(m_pLuaS, -3, "cpath");
+    }
+
+    int AddPackage(lua_CFunction f)
+    {
+         return f(m_pLuaS);
     }
 
     bool LoadScript( const std::string& strName )

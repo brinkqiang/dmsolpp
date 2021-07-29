@@ -1,17 +1,25 @@
 #include "gtest.h"
 
 #include "interface.sol.h"
-#include "sol/sol.hpp"
 #include "player.h"
+#include "dmlua.h"
 
 TEST(DoSol, DoSol)
 {
-    sol::state lua;
+    CDMLuaEngine oDMLuaEngine;
 
-    lua.open_libraries();
-    lua.require("interface", sol::c_call<decltype(&luaopen_interface), &luaopen_interface>);
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR);
+    auto state = oDMLuaEngine.GetSol();
+    state.require("interface", sol::c_call<decltype(&luaopen_interface), &luaopen_interface>);
 
-    auto script_result = lua.safe_script(R"(
+    //if (!oDMLuaEngine.ReloadScript())
+    //{
+    //    ASSERT_TRUE(0);
+    //    return;
+    //}
+
+    auto script_result = state.safe_script(R"(
         module("interface", package.seeall)
         local p = CPlayer.new()
         p:Init()
