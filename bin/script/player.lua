@@ -1,6 +1,5 @@
 module("interface", package.seeall)
-local p = require("player")
-
+local p = CPlayer.new()
 p:Init()
 p:NotChange()
 p:OnChange()
@@ -11,3 +10,5 @@ print("[3]" .. p:GetObjID())
 p:SetHP(GNextID())
 print("[4]" .. p:GetHP())
 print("[5]" .. CPlayer.NextID())
+
+return p

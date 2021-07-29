@@ -9,7 +9,7 @@ TEST(DoSol, DoSol)
     CDMLuaEngine oDMLuaEngine;
 
     std::string strScriptRootPath = DMGetRootPath();
-    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR);
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
 
     oDMLuaEngine.AddModule(require_interface);
 
