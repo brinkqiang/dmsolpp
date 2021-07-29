@@ -711,6 +711,11 @@ public:
 
     bool LoadScript()
     {
+        for (auto it : m_vecFunction)
+        {
+            it(GetState());
+        }
+
         __SetSrcDirectory( !m_strSrcPath.empty() ? m_strSrcPath : __GetScriptPath() );
         __ParserBegin();
         __ParserFiles( m_strSrcPath, "" );
@@ -726,7 +731,7 @@ public:
 
         for (auto it : m_vecFunction)
         {
-            it(oEngine.GetState());
+            oEngine.AddModule(it);
         }
 
         if ( !oEngine.LoadScript() )
