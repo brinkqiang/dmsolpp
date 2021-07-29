@@ -29,6 +29,12 @@ CPlayer::~CPlayer()
 
 }
 
+
+void CPlayer::DoAction()
+{
+
+}
+
 void CPlayer::Init()
 {
     db::tb_person data;

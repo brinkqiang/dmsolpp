@@ -55,6 +55,7 @@ namespace lua_module_interface
             , sol::constructors<CPlayer(), CPlayer(int,std::string), CPlayer(std::string)>()
             , sol::meta_function::garbage_collect, sol::destructor([](CPlayer& temp) { temp.~CPlayer(); })
             , sol::base_classes, sol::bases<CCreature,CObject>()
+            , "DoAction", &CPlayer::DoAction
             , "Init", &CPlayer::Init
             , "OnChange", &CPlayer::OnChange
             , "NotChange", &CPlayer::NotChange

@@ -1,4 +1,5 @@
 module("interface", package.seeall)
+
 local p = require("player")
 
 p:Init()
