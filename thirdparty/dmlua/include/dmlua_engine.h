@@ -694,9 +694,11 @@ public:
         lua_setfield(m_pLuaS, -3, "cpath");
     }
 
-    int AddPackage(lua_CFunction f)
+    int AddModule(lua_CFunction f)
     {
-         return f(m_pLuaS);
+        m_vecFunction.push_back(f);
+
+        return 0;
     }
 
     bool LoadScript( const std::string& strName )
@@ -722,12 +724,18 @@ public:
         CDMLuaEngine oEngine;
         oEngine.SetRootPath(m_strSrcPath);
 
+        for (auto it : m_vecFunction)
+        {
+            it(oEngine.GetState());
+        }
+
         if ( !oEngine.LoadScript() )
         {
             goto FAIL;
         }
 
         oEngine.Swap( *this );
+
         return true;
 FAIL:
         return false;
@@ -1253,10 +1261,13 @@ protected:
 
     typedef std::vector<SFileInfo> VecFileInfo;
     typedef VecFileInfo::iterator VecFileInfoIt;
+    typedef std::vector<lua_CFunction> VecFunction;
+    typedef VecFunction::iterator VecFunctionIt;
 
     VecFileInfo m_vecFileInfo;
     std::string m_strSrcPath;
     std::string m_strCwd;
+    VecFunction m_vecFunction;
     uint32_t m_dwStartTime;
     bool m_bStartTime;
 };
