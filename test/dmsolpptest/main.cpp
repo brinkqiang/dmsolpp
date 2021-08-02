@@ -33,7 +33,20 @@ TEST(DoSol, DoSol)
         print("[4]" .. p:GetHP())
         print("[5]" .. CPlayer.NextID())
         )");
+
+
+    oDMLuaEngine.DoString(R"(
+        function add(a , b)
+            return a + b
+        end
+        )");
+
     auto state = oDMLuaEngine.GetSol();
+
+    int num = state["add"](1, 2);
+
+    int num2 = oDMLuaEngine.CallT<int>("add", 1 , 2);
+
     auto script_result = state.safe_script(R"(
         module("interface", package.seeall)
         local p = CPlayer.new()
