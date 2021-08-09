@@ -23,7 +23,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H%M')"
 
       - name: Create Build Environment
-
+        shell: bash
         run: |
         apt install autopoint
         cmake -E make_directory ${{runner.workspace}}/build
