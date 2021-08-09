@@ -24,9 +24,7 @@ jobs:
 
       - name: Create Build Environment
         shell: bash
-        run: |
-        apt install autopoint
-        cmake -E make_directory ${{runner.workspace}}/build
+        run: sudo apt install autopoint && cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
         shell: bash
