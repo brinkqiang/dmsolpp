@@ -1,39 +1,65 @@
-#define SOL_ALL_SAFETIES_ON 1
-#include <sol/sol.hpp>
+#include "gtest.h"
 
-#include <iostream>
+#include "interface.sol.h"
+#include "player.h"
+#include "dmlua.h"
 
-int main() {
-    std::cout << "=== override-able member functions ===" << std::endl;
+TEST(DoSol, DoSol)
+{
+    CDMLuaEngine oDMLuaEngine;
 
-    struct thingy {
-        thingy(){
-        }
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
 
-        virtual void paint() {
-            std::cout << "paint in cpp" << std::endl;
-        }
-    };
+    oDMLuaEngine.AddModule(require_interface);
 
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
 
-    lua.new_usertype<thingy>("thingy",
-        sol::constructors<thingy()>(),
-        "paint", &thingy::paint);
+    oDMLuaEngine.DoString(R"(
+        module("interface", package.seeall)
+        local p = CPlayer.new()
+        p:Init()
+        p:NotChange()
+        p:OnChange()
+        print("[1]" .. GNextID())
+        print("[2]" .. p.NextID())
+        p:SetObjID(GNextID())
+        print("[3]" .. p:GetObjID())
+        p:SetHP(GNextID())
+        print("[4]" .. p:GetHP())
+        print("[5]" .. CPlayer.NextID())
+        )");
 
-    sol::string_view code = R"(
-    obj = thingy.new()
-    obj:paint()
-    obj.paint = function (self) print("paint in lua") end
-    obj:paint()
-    function obj:paint () print("paint in lua2") end
-    obj:paint()
-    )";
 
-    lua.safe_script(code);
+    oDMLuaEngine.DoString(R"(
+        function add(a , b)
+            return a + b
+        end
+        )");
 
-    std::cout << std::endl;
+    auto state = oDMLuaEngine.GetSol();
 
-    return 0;
+    int num = state["add"](1, 2);
+
+    int num2 = oDMLuaEngine.CallT<int>("add", 1 , 2);
+
+    auto script_result = state.safe_script(R"(
+        module("interface", package.seeall)
+        local p = CPlayer.new()
+        p:Init()
+        p:NotChange()
+        p:OnChange()
+        print("[1]" .. GNextID())
+        print("[2]" .. p.NextID())
+        p:SetObjID(GNextID())
+        print("[3]" .. p:GetObjID())
+        p:SetHP(GNextID())
+        print("[4]" .. p:GetHP())
+        print("[5]" .. CPlayer.NextID())
+        )", sol::script_throw_on_error);
+    ASSERT_TRUE(script_result.valid());
 }
