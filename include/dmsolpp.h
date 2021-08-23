@@ -23,6 +23,7 @@
 #define __DMSOLPP_H_INCLUDE__
 
 #include "dmos.h"
+#include "dmlua.h"
 
 class Idmsolpp
 {
@@ -31,6 +32,10 @@ public:
     virtual void DMAPI Release(void) = 0;
 	
     virtual void DMAPI Test(void) = 0;
+
+    virtual CDMLuaEngine& DMAPI GetDMLuaEngine() = 0;
+
+    virtual sol::state_view DMAPI GetSolEngine() = 0;
 };
 
 Idmsolpp* DMAPI dmsolppGetModule();
