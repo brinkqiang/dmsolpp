@@ -44,6 +44,18 @@ void DMAPI Cdmsolpp_module::Test(void)
     fmt::print("{}\n", "PROJECT_NAME_LO = dmsolpp");
 }
 
+
+CDMLuaEngine& DMAPI Cdmsolpp_module::GetDMLuaEngine()
+{
+    return m_oDMLuaEngine;
+}
+
+
+sol::state_view DMAPI Cdmsolpp_module::GetSolEngine()
+{
+    return m_oDMLuaEngine.GetSol();
+}
+
 Idmsolpp* DMAPI dmsolppGetModule()
 {
     return new Cdmsolpp_module();
