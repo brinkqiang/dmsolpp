@@ -1,8 +1,11 @@
 module("interface", package.seeall)
 
-local player = require("player")
+local player_mgr = require("player")
 
-local p = player.create_player()
+local player = player_mgr.create_player()
+
+local p = player_mgr.find_player(player:GetObjID())
+
 p:Init()
 p:NotChange()
 p:OnChange()
@@ -13,3 +16,5 @@ print("[3]" .. p:GetObjID())
 p:SetHP(GNextID())
 print("[4]" .. p:GetHP())
 print("[5]" .. CPlayer.NextID())
+
+player_mgr.release_player(p)

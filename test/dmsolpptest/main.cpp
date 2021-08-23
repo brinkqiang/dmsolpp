@@ -25,6 +25,7 @@ TEST(DoSol, DoSol)
         p:Init()
         p:NotChange()
         p:OnChange()
+        print(MAX_NAME_LEN)
         print("[1]" .. GNextID())
         print("[2]" .. p.NextID())
         p:SetObjID(GNextID())
@@ -33,7 +34,6 @@ TEST(DoSol, DoSol)
         print("[4]" .. p:GetHP())
         print("[5]" .. CPlayer.NextID())
         )");
-
 
     oDMLuaEngine.DoString(R"(
         function add(a , b)
