@@ -7,19 +7,19 @@
 #include "dmrapidpool.h"
 #include "role/role.h"
 
-class CRoleMgr : public TSingleton<CRoleMgr>
-{
+class CRoleMgr : public TSingleton<CRoleMgr> {
     friend class TSingleton<CRoleMgr>;
 
 public:
     CRoleMgr();
     ~CRoleMgr();
 
-public:
+  public:
     CRole*   FindRole( uint64_t qwID );
     CRole*   CreateRole();
     void     ReleaseRole( CRole* poRole );
-private:
+
+  private:
     uint64_t GetNextObjID();
 
     CDynamicRapidPool<CRole, 10000, 100> m_oRolePool;

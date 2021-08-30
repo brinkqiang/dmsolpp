@@ -53,8 +53,6 @@
 
 #include "sol/sol.hpp"
 
-TOLUA_API int tolua_interface_open( lua_State* tolua_S );
-
 inline char* tolua_SafeStrCopy( char* des, const char* src, size_t max_len )
 {
     // initialize for check below

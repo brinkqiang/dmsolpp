@@ -8,44 +8,38 @@
 
 /// ��������ģ��
 
-class CObj {    // tolua_export
-public:
-    void Reset()
-    {
+class CObj { // tolua_export
+  public:
+    void Reset() {
         m_qwObjID = -1;
     }
 
-private:
+  private:
     uint64_t            m_qwObjID;
     std::string         m_strName;
 
-public:
+  public:
 // tolua_begin
-    CObj()
-    {
+    CObj() {
         Reset();
     }
 
-    virtual ~CObj()
-    {
+    virtual ~CObj() {
         Reset();
     }
-    void SetObjID( uint64_t qwObjID )
-    {
+    void SetObjID( uint64_t qwObjID ) {
         m_qwObjID = qwObjID;
     }
-
-    uint64_t GetObjID()
-    {
+    uint64_t GetObjID() {
         return m_qwObjID;
     }
-
-    void SetName( const char* szName )
-    {
+    void GetObjID(uint64_t& qwObjID) {
+        qwObjID = m_qwObjID;
+    }
+    void SetName( const char* szName ) {
         m_strName = szName;
     }
-    const char* GetName()
-    {
+    const char* GetName() {
         return m_strName.c_str();
     }
 };
@@ -53,63 +47,52 @@ public:
 
 
 class CRole : public CObj { // tolua_export
-
-public:
-    void Reset()
-    {
+  public:
+    void Reset() {
         m_nHP = 0;
         m_nMP = 0;
     }
-private:
+  private:
     int     m_nHP;
     int     m_nMP;
 
     TaskInfoMap m_TaskInfoMap;
     SPos    m_stPos;
 
-public:
+  public:
 // tolua_begin
-    CRole()
-    {
+    CRole() {
         Reset();
     }
-    virtual ~CRole()
-    {
+    virtual ~CRole() {
         Reset();
     }
-    void SetMp( int nMp )
-    {
+    void SetMp( int nMp ) {
         m_nMP = nMp;
     }
-    int GetMp()
-    {
+    int GetMp() {
         return m_nMP;
     }
 
-    void SetHp( int nHp )
-    {
+    void SetHp( int nHp ) {
         m_nHP = nHp;
     }
-    int GetHp()
-    {
+    int GetHp() {
         return m_nHP;
     }
 
-    void AddMP( int nMp )
-    {
+    void AddMP( int nMp ) {
         m_nMP += nMp;
     }
-    void AddHP( int nHp )
-    {
+    void AddHP( int nHp ) {
         m_nHP += nHp;
     }
 
-    void SetPos( const SPos& stPos )
-    {
+
+    void SetPos( const SPos& stPos ) {
         m_stPos = stPos;
     }
-    SPos& GetPos()
-    {
+    SPos& GetPos() {
         return m_stPos;
     }
 

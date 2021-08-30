@@ -3,19 +3,20 @@
 #include "gtest/gtest.h"
 #include "dmlua.h"
 #include "dmutil.h"
+#include "script/interface.h"
 
 #define DMLUA_TEST_COUNT 10000
 
 TEST(luabasetest, luabasetest)
 {
     CDMLuaEngine oDMLuaEngine;
-    //The default search path is to search the root directory with the exe program /../relative path (because cmake will add the $BUILD_TYPE directory to the generated bin directory.)
-    //If you need to modify to other paths, please set your own search path
+    /// The default search path is to search the root directory with the exe program /../ relative path (because cmake will add the $BUILD_TYPE directory to the generated bin directory.)
+    /// If you need to modify to other paths, please set your own search path
 
-    //默认搜索路径是以 exe程序 /../相对路径为搜索根目录(原因是 cmake 会在生成的bin目录加上$BUILD_TYPE目录.)
-    //如果需要修改为其他路径, 请自行设置搜索路径
-    //std::string strScriptRootPath = DMGetRootPath();
-    //oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR);
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR);
+
+    oDMLuaEngine.AddModule(tolua_interface_open);
 
     if (!oDMLuaEngine.ReloadScript())
     {
