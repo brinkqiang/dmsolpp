@@ -1,13 +1,13 @@
 
 #include "dmlua.h"
 
-TOLUA_API int  tolua_interface_open(lua_State* tolua_S) {
-    return 0;
-}
 
 int main(int argc, char** argv) {
 
     CDMLuaEngine oDMLuaEngine;
+
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
 
     if (!oDMLuaEngine.ReloadScript()) {
         return -1;
