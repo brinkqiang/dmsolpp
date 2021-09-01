@@ -667,7 +667,7 @@ public:
         return 0 == nRet ? true : false;
     }
 
-    void AddPath(const std::string& strPath)
+    void AddLuaPath(const std::string& strPath)
     {
         CLuaStateGuard oGuard(m_pLuaS, "AddPath");
 
@@ -682,7 +682,7 @@ public:
         lua_setfield(m_pLuaS, -3, "path");
     }
 
-    void AddCPath(const std::string& strPath)
+    void AddLuaCPath(const std::string& strPath)
     {
         CLuaStateGuard oGuard(m_pLuaS, "AddCPath");
 
@@ -737,7 +737,7 @@ public:
             oEngine.AddModule(it);
         }
 
-        oEngine.AddPath(m_strSrcPath);
+        oEngine.AddLuaPath(m_strSrcPath);
 
         if ( !oEngine.LoadScript() )
         {
