@@ -597,7 +597,6 @@ public:
         : m_pLuaS( luaL_newstate() ), m_dwStartTime( 0 ), m_bStartTime( false )
     {
         luaL_openlibs( m_pLuaS );
-        AddPath("");
     }
 
     virtual ~CDMLuaEngine()
@@ -613,7 +612,6 @@ public:
     {
         m_strSrcPath = strPath;
 
-        AddPath(strPath);
     }
 
     void Swap( CDMLuaEngine& oEngine )
@@ -738,6 +736,7 @@ public:
             oEngine.AddModule(it);
         }
 
+        oEngine.AddPath(m_strSrcPath);
 
         if ( !oEngine.LoadScript() )
         {
