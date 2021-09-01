@@ -621,6 +621,7 @@ public:
         std::swap( m_strSrcPath, oEngine.m_strSrcPath );
         std::swap( m_strCwd, oEngine.m_strCwd );
         std::swap( m_dwStartTime, oEngine.m_dwStartTime );
+        std::swap( m_vecFunction, oEngine.m_vecFunction);
     }
 
     void RunLuagc()
