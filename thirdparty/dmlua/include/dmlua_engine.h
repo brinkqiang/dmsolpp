@@ -612,6 +612,8 @@ public:
     void SetRootPath( const std::string& strPath )
     {
         m_strSrcPath = strPath;
+
+        AddPath(strPath);
     }
 
     void Swap( CDMLuaEngine& oEngine )
@@ -673,7 +675,11 @@ public:
         lua_getglobal(m_pLuaS, "package");
         lua_getfield(m_pLuaS, -1, "path");
         const char* curPath = lua_tostring(m_pLuaS, -1);
+#ifdef _WIN32
+        lua_pushfstring(m_pLuaS, "%s;%s\\?.lua", curPath, strPath.c_str());
+#else
         lua_pushfstring(m_pLuaS, "%s;%s/?.lua", curPath, strPath.c_str());
+#endif
         lua_setfield(m_pLuaS, -3, "path");
     }
 
@@ -685,7 +691,7 @@ public:
         lua_getfield(m_pLuaS, -1, "cpath");
         const char* curPath = lua_tostring(m_pLuaS, -1);
 #ifdef _WIN32
-        lua_pushfstring(m_pLuaS, "%s;%s/?.dll", curPath, strPath.c_str());
+        lua_pushfstring(m_pLuaS, "%s;%s\\?.dll", curPath, strPath.c_str());
 #else
         lua_pushfstring(m_pLuaS, "%s;%s/?.so", curPath, strPath.c_str());
 #endif
@@ -731,6 +737,7 @@ public:
         {
             oEngine.AddModule(it);
         }
+
 
         if ( !oEngine.LoadScript() )
         {
