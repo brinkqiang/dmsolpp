@@ -611,7 +611,6 @@ public:
     void SetRootPath( const std::string& strPath )
     {
         m_strSrcPath = strPath;
-
     }
 
     void Swap( CDMLuaEngine& oEngine )
@@ -622,6 +621,7 @@ public:
         std::swap( m_strCwd, oEngine.m_strCwd );
         std::swap( m_dwStartTime, oEngine.m_dwStartTime );
         std::swap( m_vecFunction, oEngine.m_vecFunction);
+        std::swap( m_bStartTime, oEngine.m_bStartTime);
     }
 
     void RunLuagc()
