@@ -25,7 +25,7 @@
 
 static void help( void ) {
     fprintf( stderr, "\n"
-             "usage: tolua++ [options] input_file\n"
+             "usage: toluapp [options] input_file\n"
              "\n"
              "Command line options are:\n"
              "  -v       : print version information.\n"
