@@ -1152,6 +1152,8 @@ private:
         char szPath[MAX_PATH] = {0};
         m_strCwd = getcwd( szPath, MAX_PATH );
         chdir( m_strSrcPath.c_str() );
+        
+        m_vecFileInfo.clear();
     }
 
     void __LoadScriptAll()
@@ -1168,8 +1170,6 @@ private:
                 }
             }
         }
-
-        m_vecFileInfo.clear();
     }
 
     void __ParserEnd()
