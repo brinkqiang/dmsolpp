@@ -24,10 +24,10 @@ ModuleImport("dmtest" "thirdparty/dmtest")
 ModuleImport("dmlua" "thirdparty/dmlua")
 ModuleImport("dmformat" "thirdparty/dmformat")
 ModuleInclude("dmlua" "thirdparty/dmlua/src/${LUA_MODULE}")
-ModuleInclude("dmlua" "thirdparty/dmlua/src/tolua")
+ModuleInclude("dmlua" "thirdparty/dmlua/src/libtolua")
 
 LibImport("dmsolpp" "src/dmsolpp")
-ExeImport("test" "dmsolpp;libprotobuf-lite;libprotoc;dmtest;${LUA_MODULE};tolua")
+ExeImport("test" "dmsolpp;libprotobuf-lite;libprotoc;dmtest;${LUA_MODULE};libtolua")
 
 IF (WIN32)
 #ADD_CUSTOM_COMMAND(

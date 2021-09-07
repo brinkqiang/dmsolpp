@@ -12,10 +12,10 @@ SET(LUA_MODULE lua54)
 
 ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
-LuaModuleImport("${LUA_MODULE}" "tolua" "src/tolua" "")
+LuaModuleImport("${LUA_MODULE}" "libtolua" "src/libtolua" "")
 
-ExeImport("tool" "${LUA_MODULE};tolua")
-ExeImport("samples" "${LUA_MODULE};tolua")
+ExeImport("tool" "${LUA_MODULE};libtolua")
+ExeImport("samples" "${LUA_MODULE};libtolua")
 
 IF (WIN32)
 ADD_CUSTOM_COMMAND(
