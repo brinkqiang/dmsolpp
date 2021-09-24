@@ -2353,7 +2353,7 @@ class system_error : public std::runtime_error {
   template <typename... Args>
   system_error(int error_code, string_view message, const Args & ... args)
     : std::runtime_error("") {
-    init(error_code, message, make_format_args(args...));
+    init(error_code, message, fmt::make_format_args(args...));
   }
 
   int error_code() const { return error_code_; }
@@ -3007,7 +3007,7 @@ class windows_error : public system_error {
   */
   template <typename... Args>
   windows_error(int error_code, string_view message, const Args & ... args) {
-    init(error_code, message, make_format_args(args...));
+    init(error_code, message, fmt::make_format_args(args...));
   }
 };
 
@@ -3528,14 +3528,14 @@ template <typename... Args, std::size_t SIZE = inline_buffer_size>
 inline format_context::iterator format_to(
     basic_memory_buffer<char, SIZE> &buf, string_view format_str,
     const Args & ... args) {
-  return vformat_to(buf, format_str, make_format_args(args...));
+  return vformat_to(buf, format_str, fmt::make_format_args(args...));
 }
 
 template <typename... Args, std::size_t SIZE = inline_buffer_size>
 inline wformat_context::iterator format_to(
     basic_memory_buffer<wchar_t, SIZE> &buf, wstring_view format_str,
     const Args & ... args) {
-  return vformat_to(buf, format_str, make_format_args<wformat_context>(args...));
+  return vformat_to(buf, format_str, fmt::make_format_args<wformat_context>(args...));
 }
 
 template <typename OutputIt, typename Char = char>
@@ -3578,7 +3578,7 @@ template <typename OutputIt, typename... Args>
 inline OutputIt format_to(OutputIt out, string_view format_str,
                           const Args & ... args) {
   return vformat_to(out, format_str,
-      make_format_args<typename format_context_t<OutputIt>::type>(args...));
+      fmt::make_format_args<typename format_context_t<OutputIt>::type>(args...));
 }
 
 template <typename Container, typename... Args>
@@ -3586,7 +3586,7 @@ inline typename std::enable_if<
   is_contiguous<Container>::value, std::back_insert_iterator<Container>>::type
     format_to(std::back_insert_iterator<Container> out,
               string_view format_str, const Args & ... args) {
-  return vformat_to(out, format_str, make_format_args<format_context>(args...));
+  return vformat_to(out, format_str, fmt::make_format_args<format_context>(args...));
 }
 
 template <typename Container, typename... Args>
@@ -3594,7 +3594,7 @@ inline typename std::enable_if<
   is_contiguous<Container>::value, std::back_insert_iterator<Container>>::type
     format_to(std::back_insert_iterator<Container> out,
               wstring_view format_str, const Args & ... args) {
-  return vformat_to(out, format_str, make_format_args<wformat_context>(args...));
+  return vformat_to(out, format_str, fmt::make_format_args<wformat_context>(args...));
 }
 
 template <typename OutputIt>
@@ -3645,7 +3645,7 @@ inline format_to_n_result<OutputIt> format_to_n(
     OutputIt out, std::size_t n, wstring_view format_str, const Args &... args) {
   typedef internal::truncating_iterator<OutputIt> It;
   auto it = vformat_to(It(out, n), format_str,
-      make_format_args<typename format_context_t<It, wchar_t>::type>(args...));
+      fmt::make_format_args<typename format_context_t<It, wchar_t>::type>(args...));
   return {it.base(), it.count()};
 }
 
@@ -3666,14 +3666,14 @@ inline typename std::enable_if<
   internal::is_format_string<String>::value, std::string>::type
     format(String format_str, const Args & ... args) {
   internal::check_format_string<Args...>(format_str);
-  return vformat(format_str.data(), make_format_args(args...));
+  return vformat(format_str.data(), fmt::make_format_args(args...));
 }
 
 template <typename String, typename... Args>
 inline typename std::enable_if<internal::is_format_string<String>::value>::type
     print(String format_str, const Args & ... args) {
   internal::check_format_string<Args...>(format_str);
-  return vprint(format_str.data(), make_format_args(args...));
+  return vprint(format_str.data(), fmt::make_format_args(args...));
 }
 
 /**
@@ -3861,7 +3861,7 @@ void vprint_rgb(rgb fd, rgb bg, string_view format, format_args args);
  */
 template <typename... Args>
 inline void print(rgb fd, string_view format_str, const Args & ... args) {
-  vprint_rgb(fd, format_str, make_format_args(args...));
+  vprint_rgb(fd, format_str, fmt::make_format_args(args...));
 }
 
 /**
@@ -3872,7 +3872,7 @@ inline void print(rgb fd, string_view format_str, const Args & ... args) {
  */
 template <typename... Args>
 inline void print(rgb fd, rgb bg, string_view format_str, const Args & ... args) {
-  vprint_rgb(fd, bg, format_str, make_format_args(args...));
+  vprint_rgb(fd, bg, format_str, fmt::make_format_args(args...));
 }
 #endif  // FMT_EXTENDED_COLORS
 
