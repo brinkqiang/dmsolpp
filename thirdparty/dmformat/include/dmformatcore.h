@@ -1041,13 +1041,13 @@ const long long format_arg_store<Context, Args...>::TYPES = get_types();
  */
 template <typename Context, typename ...Args>
 inline format_arg_store<Context, Args...>
-    fmt::make_format_args(const Args & ... args) {
+    make_format_args(const Args & ... args) {
   return format_arg_store<Context, Args...>(args...);
 }
 
 template <typename ...Args>
 inline format_arg_store<format_context, Args...>
-    fmt::make_format_args(const Args & ... args) {
+    make_format_args(const Args & ... args) {
   return format_arg_store<format_context, Args...>(args...);
 }
 
