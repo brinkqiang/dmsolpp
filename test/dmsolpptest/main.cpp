@@ -30,6 +30,7 @@ TEST(DoSolModule, DoSolModule)
         local p = CPlayer.new()
         p:Init()
         p:NotChange()
+        p.OnChange = function (self) print("OnChange in lua") end
         p:OnChange()
         print(MAX_NAME_LEN)
         print("[1]" .. GNextID())

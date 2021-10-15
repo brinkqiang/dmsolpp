@@ -34,8 +34,8 @@ namespace lua_module_interface
             , sol::constructors<CObject()>()
             , sol::meta_function::garbage_collect, sol::destructor([](CObject& temp) { temp.~CObject(); })
             , sol::base_classes, sol::bases<>()
-            , "GetObjID", &CObject::GetObjID
-            , "SetObjID", &CObject::SetObjID
+            , "GetObjID", sol::make_reference<sol::function>(lua.lua_state(), &CObject::GetObjID)
+            , "SetObjID", sol::make_reference<sol::function>(lua.lua_state(), &CObject::SetObjID)
             
             );
         module.new_usertype<CCreature>(
@@ -43,10 +43,10 @@ namespace lua_module_interface
             , sol::constructors<CCreature()>()
             , sol::meta_function::garbage_collect, sol::destructor([](CCreature& temp) { temp.~CCreature(); })
             , sol::base_classes, sol::bases<CObject>()
-            , "SetHP", &CCreature::SetHP
-            , "SetMP", &CCreature::SetMP
-            , "GetHP", &CCreature::GetHP
-            , "GetMP", &CCreature::GetMP
+            , "SetHP", sol::make_reference<sol::function>(lua.lua_state(), &CCreature::SetHP)
+            , "SetMP", sol::make_reference<sol::function>(lua.lua_state(), &CCreature::SetMP)
+            , "GetHP", sol::make_reference<sol::function>(lua.lua_state(), &CCreature::GetHP)
+            , "GetMP", sol::make_reference<sol::function>(lua.lua_state(), &CCreature::GetMP)
             
             );
         module.set_function("GNextID",&GNextID);
@@ -55,14 +55,14 @@ namespace lua_module_interface
             , sol::constructors<CPlayer(), CPlayer(int,std::string), CPlayer(std::string)>()
             , sol::meta_function::garbage_collect, sol::destructor([](CPlayer& temp) { temp.~CPlayer(); })
             , sol::base_classes, sol::bases<CCreature,CObject>()
-            , "DoAction", &CPlayer::DoAction
-            , "Init", &CPlayer::Init
-            , "OnChange", &CPlayer::OnChange
-            , "NotChange", &CPlayer::NotChange
-            , "SystemChange", &CPlayer::SystemChange
-            , "LoadFromDB", &CPlayer::LoadFromDB
-            , "SaveDB", &CPlayer::SaveDB
-            , "NextID", &CPlayer::NextID
+            , "DoAction", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::DoAction)
+            , "Init", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::Init)
+            , "OnChange", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::OnChange)
+            , "NotChange", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::NotChange)
+            , "SystemChange", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::SystemChange)
+            , "LoadFromDB", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::LoadFromDB)
+            , "SaveDB", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::SaveDB)
+            , "NextID", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::NextID)
             
             );
         module.new_usertype<STaskInfo>(

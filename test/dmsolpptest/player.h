@@ -19,7 +19,7 @@ public:
     void DoAction();
 
     void Init();
-    void OnChange();
+    virtual void OnChange();
     void NotChange();
     void SystemChange();
     void LoadFromDB(db::tb_person& data);
