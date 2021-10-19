@@ -50,6 +50,7 @@ TEST(DoSol, DoSol)
         local p = CPlayer.new()
         p:Init()
         p:NotChange()
+        p.OnChange = function (self) print("OnChange in lua") end
         p:OnChange()
         print("[1]" .. GNextID())
         print("[2]" .. p.NextID())
