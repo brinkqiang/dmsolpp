@@ -1,5 +1,5 @@
 #include "gtest.h"
-
+#include <cstddef>
 #include "interface.sol.h"
 #include "player.h"
 #include "dmsolpp.h"

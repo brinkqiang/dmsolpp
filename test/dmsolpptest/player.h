@@ -7,7 +7,7 @@
 
 uint64_t GNextID();
 
-class CPlayer : public CCreature
+class CPlayer : public virtual CCreature
 {
 public:
 // tosol_begin

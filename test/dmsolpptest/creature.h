@@ -4,7 +4,7 @@
 
 #include "object.h"
 
-class CCreature : public CObject
+class CCreature : public virtual CObject
 {
 public:
 // tosol_begin
