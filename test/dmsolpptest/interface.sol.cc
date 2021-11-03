@@ -55,7 +55,7 @@ namespace lua_module_interface
         module.set_function("GNextID",&GNextID);
         module.new_usertype<CPlayer>(
             "CPlayer"
-            , sol::constructors<CPlayer(), CPlayer(int,const std::string&), CPlayer(const std::string&)>()
+            , sol::constructors<CPlayer(),CPlayer(int,const std::string&),CPlayer(const std::string&)>()
             , sol::meta_function::garbage_collect, sol::destructor([](CPlayer& temp) { temp.~CPlayer(); })
             , sol::base_classes, sol::bases<CCreature,CObject>()
             , "DoAction", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::DoAction)
@@ -80,7 +80,7 @@ namespace lua_module_interface
             );
         module.new_usertype<SPos>(
             "SPos"
-            , sol::constructors<SPos(), SPos(int,int,int)>()
+            , sol::constructors<SPos(),SPos(int,int,int)>()
             , sol::meta_function::garbage_collect, sol::destructor([](SPos& temp) { temp.~SPos(); })
             , sol::base_classes, sol::bases<>()
             
