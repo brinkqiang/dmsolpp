@@ -54,6 +54,9 @@ TEST(DoSolModule, DoSolModule)
 
     int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
 
+    CPlayer oPlayer;
+    int num3 = state["test"]["main"]["dowork"](&oPlayer);
+
     auto script_result = state.safe_script(R"(
         module("interface", package.seeall)
         local p = CPlayer.new()
