@@ -7,11 +7,7 @@
 
 uint64_t GNextID();
 
-template<class T>
-void all_cast(T& t)
-{
 
-}
 
 class CPlayer : public virtual CCreature
 {

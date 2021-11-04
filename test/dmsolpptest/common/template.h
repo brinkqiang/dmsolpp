@@ -2,16 +2,16 @@
 #define __TEMPLATE_H_INCLUDE__
 
 template<class T>
-void cast2string(T& t)
+std::string cast2string(T& t)
 {
-
+    return std::to_string(t);
 }
 
 template<class T>
-class cast2string
+class TCastString
 {
 public:
-    std::string operator (T&& t)
+    std::string operator()(T&& t)
     {
         return std::to_string(t);
     }
