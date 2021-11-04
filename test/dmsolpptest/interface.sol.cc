@@ -22,6 +22,8 @@
 
 #include "common/struct.h"
 
+#include "common/template.h"
+
 
 #include "sol/sol.hpp"
 
