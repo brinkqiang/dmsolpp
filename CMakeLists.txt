@@ -17,7 +17,7 @@ MESSAGE(STATUS "VERSION: ${DMSOLPP_VERSION}")
 
 OPTION(USE_DMSOLPP "use dmsolpp" OFF)
 
-SET(LUA_MODULE lua54)
+SET(LUA_MODULE lua53)
 
 ModuleImport("dmprotobuf" "thirdparty/dmprotobuf")
 ModuleImport("dmtest" "thirdparty/dmtest")
