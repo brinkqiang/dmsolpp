@@ -1,9 +1,11 @@
-module("interface", package.seeall)
+module(..., package.seeall)
+
+local interface = require("interface")
 
 _M = {}
 _M.pmap = {}
 function _M.create_player()
-    local p = CPlayer.new()
+    local p = interface.CPlayer.new()
 
     _M.pmap[p:GetObjID()] = p
 

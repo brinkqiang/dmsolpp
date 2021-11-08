@@ -1,5 +1,5 @@
-module("interface", package.seeall)
 module(..., package.seeall)
+local interface = require("interface")
 
 function dowork(p)
     p:Init()

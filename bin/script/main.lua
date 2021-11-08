@@ -1,4 +1,6 @@
-module("interface", package.seeall)
+module(..., package.seeall)
+
+local interface = require("interface")
 
 local player_mgr = require("player")
 
@@ -10,12 +12,12 @@ p:Init()
 p:NotChange()
 p.OnChange = function (self) print("OnChange in lua") end
 p:OnChange()
-print("[1]" .. GNextID())
+print("[1]" .. interface.GNextID())
 print("[2]" .. p.NextID())
-p:SetObjID(GNextID())
+p:SetObjID(interface.GNextID())
 print("[3]" .. p:GetObjID())
-p:SetHP(GNextID())
+p:SetHP(interface.GNextID())
 print("[4]" .. p:GetHP())
-print("[5]" .. CPlayer.NextID())
+print("[5]" .. interface.CPlayer.NextID())
 
 player_mgr.release_player(p)

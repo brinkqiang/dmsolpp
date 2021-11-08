@@ -8,7 +8,7 @@ INCLUDE(cmake/ModuleCompileOptions.cmake)
 INCLUDE(cmake/LuaModule.cmake)
 ModuleSetCompileOptions()
 
-SET(LUA_MODULE lua54)
+SET(LUA_MODULE lua53)
 
 ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
