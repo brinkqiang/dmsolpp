@@ -25,12 +25,12 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 dmsolpp
 ```cpp
 #include "gtest.h"
-
+#include <cstddef>
 #include "interface.sol.h"
 #include "player.h"
-#include "dmlua.h"
+#include "dmsolpp.h"
 
-TEST(DoSol, DoSol)
+TEST(DoSolModule, DoSolModule)
 {
     CDMLuaEngine oDMLuaEngine;
 
@@ -46,21 +46,21 @@ TEST(DoSol, DoSol)
     }
 
     oDMLuaEngine.DoString(R"(
-        module("interface", package.seeall)
-        local p = CPlayer.new()
+        local interface = require("interface")
+        local p = interface.CPlayer.new()
         p:Init()
         p:NotChange()
         p.OnChange = function (self) print("OnChange in lua") end
         p:OnChange()
-        print("[1]" .. GNextID())
+        print(MAX_NAME_LEN)
+        print("[1]" .. interface.GNextID())
         print("[2]" .. p.NextID())
-        p:SetObjID(GNextID())
+        p:SetObjID(interface.GNextID())
         print("[3]" .. p:GetObjID())
-        p:SetHP(GNextID())
+        p:SetHP(interface.GNextID())
         print("[4]" .. p:GetHP())
-        print("[5]" .. CPlayer.NextID())
+        print("[5]" .. interface.CPlayer.NextID())
         )");
-
 
     oDMLuaEngine.DoString(R"(
         function add(a , b)
@@ -72,21 +72,24 @@ TEST(DoSol, DoSol)
 
     int num = state["add"](1, 2);
 
-    int num2 = oDMLuaEngine.CallT<int>("add", 1 , 2);
+    int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
+
+    CPlayer oPlayer;
+    int num3 = state["test"]["main"]["dowork"](&oPlayer);
 
     auto script_result = state.safe_script(R"(
-        module("interface", package.seeall)
-        local p = CPlayer.new()
+        local interface = require("interface")
+        local p = interface.CPlayer.new()
         p:Init()
         p:NotChange()
         p:OnChange()
-        print("[1]" .. GNextID())
+        print("[1]" .. interface.GNextID())
         print("[2]" .. p.NextID())
-        p:SetObjID(GNextID())
+        p:SetObjID(interface.GNextID())
         print("[3]" .. p:GetObjID())
-        p:SetHP(GNextID())
+        p:SetHP(interface.GNextID())
         print("[4]" .. p:GetHP())
-        print("[5]" .. CPlayer.NextID())
+        print("[5]" .. interface.CPlayer.NextID())
         )", sol::script_throw_on_error);
     ASSERT_TRUE(script_result.valid());
 }
