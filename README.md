@@ -23,8 +23,15 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 
 ## Intro
 dmsolpp
+
+command
 ```
 dmsolpp --PKG=interface.pkg
+```
+output
+```
+interface.sol.cc
+interface.sol.h
 ```
 
 
