@@ -33,7 +33,10 @@ output
 interface.sol.cc
 interface.sol.h
 ```
-
+addmodule
+```
+oDMLuaEngine.AddModule(require_interface);
+```
 
 ```cpp
 #include "gtest.h"
