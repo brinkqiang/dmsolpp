@@ -48,13 +48,21 @@ TEST(DoSolModule, DoSolModule)
         end
         )");
 
+    oDMLuaEngine.DoString(R"(
+        function addplayer(player)
+            print("[addplayer]: " .. player:GetName())
+        end
+        )");
     auto state = oDMLuaEngine.GetSol();
 
     int num = state["add"](1, 2);
 
+
     int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
 
-    CPlayer oPlayer;
+    CPlayer oPlayer(5, "zhangsan");
+    state["addplayer"](oPlayer);
+
     int num3 = state["test"]["main"]["dowork"](&oPlayer);
 
     auto script_result = state.safe_script(R"(

@@ -26,12 +26,13 @@ public:
     void SystemChange();
     void LoadFromDB(db::tb_person& data);
     void SaveDB(db::tb_person& data);
-
+    std::string GetName(){ return m_strName;};
     static uint64_t NextID();
 // tosol_end
 private:
     db::tb_person m_data_v1;
     db::tb_person m_data_v2;
+    std::string m_strName;
 };
 
 #endif // __PLAYER_H__

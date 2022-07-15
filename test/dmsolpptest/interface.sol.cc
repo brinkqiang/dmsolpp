@@ -67,6 +67,7 @@ namespace lua_module_interface
             , "SystemChange", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::SystemChange)
             , "LoadFromDB", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::LoadFromDB)
             , "SaveDB", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::SaveDB)
+            , "GetName", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::GetName)
             , "NextID", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::NextID)
             
             );
