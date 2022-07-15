@@ -46,7 +46,6 @@ TEST(DoSolModule, DoSolModule)
         local interface = require("interface")
         local p = interface.create_player();
 
-
         local p2 = interface.find_player(p:GetObjID());
         p2:Init()
         p2:NotChange()
