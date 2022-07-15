@@ -43,6 +43,20 @@ TEST(DoSolModule, DoSolModule)
         )");
 
     oDMLuaEngine.DoString(R"(
+        local interface = require("interface")
+        local p = interface.create_player();
+
+
+        local p2 = interface.find_player(p:GetObjID());
+        p2:Init()
+        p2:NotChange()
+        p2.OnChange = function (self) print("OnChange in lua") end
+        p2:OnChange()
+
+        interface.release_player(p:GetObjID())
+        )");
+
+    oDMLuaEngine.DoString(R"(
         function add(a , b)
             return a + b
         end

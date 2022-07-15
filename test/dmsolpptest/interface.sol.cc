@@ -14,6 +14,8 @@
 
 #include "player.h"
 
+#include "playermgr.h"
+
 #include "common/types.h"
 
 #include "common/enum.h"
@@ -69,6 +71,18 @@ namespace lua_module_interface
             , "SaveDB", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::SaveDB)
             , "GetName", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::GetName)
             , "NextID", sol::make_reference<sol::function>(lua.lua_state(), &CPlayer::NextID)
+            
+            );
+        module.set_function("create_player",&create_player);
+        module.set_function("find_player",&find_player);
+        module.set_function("release_player",&release_player);
+        module.new_usertype<CPlayerMgr>(
+            "CPlayerMgr"
+            , sol::constructors<>()
+            , sol::base_classes, sol::bases<>()
+            , "create_player", sol::make_reference<sol::function>(lua.lua_state(), &CPlayerMgr::create_player)
+            , "find_player", sol::make_reference<sol::function>(lua.lua_state(), &CPlayerMgr::find_player)
+            , "release_player", sol::make_reference<sol::function>(lua.lua_state(), &CPlayerMgr::release_player)
             
             );
         module.new_usertype<STaskInfo>(
