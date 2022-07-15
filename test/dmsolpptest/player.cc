@@ -10,16 +10,19 @@ uint64_t GNextID()
 }
 
 CPlayer::CPlayer()
+    : m_level(1)
 {
     SetObjID(GNextID());
 }
 
 CPlayer::CPlayer(int level, const std::string& strName)
+    : m_level(level), m_strName(strName)
 {
 
 }
 
 CPlayer::CPlayer(const std::string& strName)
+    : m_level(1), m_strName(strName)
 {
 
 }
