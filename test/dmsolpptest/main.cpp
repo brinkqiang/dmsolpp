@@ -71,15 +71,15 @@ TEST(DoSolpp, DoSolpp)
     // 通过导入的C++对象管理器进行对象创建 对象生命周期由C++负责 reload 之后数据还在
     auto script_result2 = state.safe_script(R"(
         local interface = require("interface")
-        local p = interface.create_player();
+        local player = interface.create_player();
 
-        local p2 = interface.find_player(p:GetObjID());
-        p2:Init()
-        p2:NotChange()
-        p2.OnChange = function (self) print("OnChange in lua") end
-        p2:OnChange()
+        local p = interface.find_player(player:GetObjID());
+        p:Init()
+        p:NotChange()
+        p.OnChange = function (self) print("OnChange in lua") end
+        p:OnChange()
 
-        interface.release_player(p:GetObjID())
+        interface.release_player(player:GetObjID())
         print("in sol2.cpp player_mgr.create_player");
         )", sol::script_throw_on_error);
     ASSERT_TRUE(script_result2.valid());
@@ -135,15 +135,15 @@ TEST(DoluaEngine, DoluaEngine)
     // 通过导入的C++对象管理器进行对象创建 对象生命周期由C++负责 reload 之后数据还在.
     oDMLuaEngine.DoString(R"(
         local interface = require("interface")
-        local p = interface.create_player();
+        local player = interface.create_player();
 
-        local p2 = interface.find_player(p:GetObjID());
-        p2:Init()
-        p2:NotChange()
-        p2.OnChange = function (self) print("OnChange in lua") end
-        p2:OnChange()
+        local p = interface.find_player(player:GetObjID());
+        p:Init()
+        p:NotChange()
+        p.OnChange = function (self) print("OnChange in lua") end
+        p:OnChange()
 
-        interface.release_player(p:GetObjID())
+        interface.release_player(player:GetObjID())
         print("in oDMLuaEngine.cpp player_mgr.create_player");
         )");
 
