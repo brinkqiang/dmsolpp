@@ -4,6 +4,7 @@
 #include "player.h"
 #include "dmsolpp.h"
 
+//  π”√dmsolppGetModuleº”‘ÿ
 TEST(DoSolModule, DoSolModule)
 {
     auto module = dmsolppGetModule();
@@ -68,7 +69,6 @@ TEST(DoSolModule, DoSolModule)
         )");
     auto state = oDMLuaEngine.GetSol();
 
-    int num = state["add"](1, 2);
 
 
     int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
@@ -112,25 +112,15 @@ TEST(DoSol, DoSol)
     }
 
     oDMLuaEngine.DoString(R"(
-        local interface = require("interface")
-        local p = interface.CPlayer.new()
-        p:Init()
-        p:NotChange()
-        p.OnChange = function (self) print("OnChange in lua") end
-        p:OnChange()
-        print(MAX_NAME_LEN)
-        print("[1]" .. interface.GNextID())
-        print("[2]" .. p.NextID())
-        p:SetObjID(interface.GNextID())
-        print("[3]" .. p:GetObjID())
-        p:SetHP(interface.GNextID())
-        print("[4]" .. p:GetHP())
-        print("[5]" .. interface.CPlayer.NextID())
+        function add(a , b)
+            return a + b
+        end
         )");
 
     oDMLuaEngine.DoString(R"(
-        function add(a , b)
-            return a + b
+        function addplayer(player)
+            print("[addplayer]: " .. player:GetName())
+            return 1
         end
         )");
 
@@ -138,10 +128,10 @@ TEST(DoSol, DoSol)
 
     int num = state["add"](1, 2);
 
-    int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
+    CPlayer oPlayer(5, "zhangsan");
+    int ret = state["test"]["main"]["dowork"](&oPlayer);
 
-    CPlayer oPlayer;
-    int num3 = state["test"]["main"]["dowork"](&oPlayer);
+    int ret2 = state["addplayer"](oPlayer);
 
     auto script_result = state.safe_script(R"(
         local interface = require("interface")
