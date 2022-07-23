@@ -34,6 +34,7 @@ TEST(DoSolpp, DoSolpp)
         end
         )");
 
+    // »ñÈ¡solÒıÇæ
     auto state = oDMLuaEngine.GetSol();
 
     int num = state["add"](1, 2);
