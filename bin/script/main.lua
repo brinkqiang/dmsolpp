@@ -21,3 +21,5 @@ print("[4]" .. p:GetHP())
 print("[5]" .. interface.CPlayer.NextID())
 
 player_mgr.release_player(p)
+
+print("in lua.file player_mgr.create_player");
