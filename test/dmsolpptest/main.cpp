@@ -65,6 +65,7 @@ TEST(DoSolpp, DoSolpp)
 
 TEST(DoluaEngine, DoluaEngine)
 {
+    // 使用接口的方式提供所有功能。
     auto module = dmsolppGetModule();
     if (nullptr == module)
     {
@@ -121,20 +122,4 @@ TEST(DoluaEngine, DoluaEngine)
         )");
 
     int num = oDMLuaEngine.CallT<int>("add", 1, 2);
-
-    oDMLuaEngine.DoString(R"(
-        local interface = require("interface")
-
-        local p = interface.CPlayer.new()
-        p:Init()
-        p:NotChange()
-        p:OnChange()
-        print("[1]" .. interface.GNextID())
-        print("[2]" .. p.NextID())
-        p:SetObjID(interface.GNextID())
-        print("[3]" .. p:GetObjID())
-        p:SetHP(interface.GNextID())
-        print("[4]" .. p:GetHP())
-        print("[5]" .. interface.CPlayer.NextID())
-        )");
 }
