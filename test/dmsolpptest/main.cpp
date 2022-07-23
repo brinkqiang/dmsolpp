@@ -14,7 +14,7 @@ TEST(DoSolpp, DoSolpp)
     // 加载自动化生成代码 模块， 如果你有多个模块，需要在这里添加多个
     oDMLuaEngine.AddModule(require_interface);
 
-    // 使用LuaEngine 主要是他可以自动load指定目录的所有文件. sol引擎本身没有实现这个功能.
+    // 使用dmlua来load 主要是他可以自动load指定目录的所有文件. sol引擎本身没有实现这个功能.
     if (!oDMLuaEngine.ReloadScript())
     {
         ASSERT_TRUE(0);
