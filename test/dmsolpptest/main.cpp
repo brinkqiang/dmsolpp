@@ -4,8 +4,65 @@
 #include "player.h"
 #include "dmsolpp.h"
 
-// 使用dmsolppGetModule加载
-TEST(DoSolModule, DoSolModule)
+TEST(DoSolpp, DoSolpp)
+{
+    CDMLuaEngine oDMLuaEngine;
+
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
+
+    // 加载自动化生成代码 模块， 如果你有多个模块，需要在这里添加多个
+    oDMLuaEngine.AddModule(require_interface);
+
+    // 使用LuaEngine 主要是他可以自动load指定目录的所有文件. sol引擎本身没有实现这个功能.
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
+
+    oDMLuaEngine.DoString(R"(
+        function add(a , b)
+            return a + b
+        end
+        )");
+
+    oDMLuaEngine.DoString(R"(
+        function addplayer(player)
+            print("[addplayer]: " .. player:GetName())
+            return 1
+        end
+        )");
+
+    auto state = oDMLuaEngine.GetSol();
+
+    int num = state["add"](1, 2);
+
+    CPlayer oPlayer(5, "zhangsan");
+    int ret = state["test"]["main"]["dowork"](&oPlayer);
+
+    int ret2 = state["addplayer"](oPlayer);
+
+    auto script_result = state.safe_script(R"(
+        local interface = require("interface")
+
+        local p = interface.CPlayer.new()
+        p:Init()
+        p:NotChange()
+        p:OnChange()
+        print("[1]" .. interface.GNextID())
+        print("[2]" .. p.NextID())
+        p:SetObjID(interface.GNextID())
+        print("[3]" .. p:GetObjID())
+        p:SetHP(interface.GNextID())
+        print("[4]" .. p:GetHP())
+        print("[5]" .. interface.CPlayer.NextID())
+        )", sol::script_throw_on_error);
+    ASSERT_TRUE(script_result.valid());
+}
+
+
+TEST(DoluaEngine, DoluaEngine)
 {
     auto module = dmsolppGetModule();
     if (nullptr == module)
@@ -62,23 +119,9 @@ TEST(DoSolModule, DoSolModule)
         end
         )");
 
+    int num = oDMLuaEngine.CallT<int>("add", 1, 2);
+
     oDMLuaEngine.DoString(R"(
-        function addplayer(player)
-            print("[addplayer]: " .. player:GetName())
-        end
-        )");
-    auto state = oDMLuaEngine.GetSol();
-
-
-
-    int num2 = oDMLuaEngine.CallT<int>("add", 1, 2);
-
-    CPlayer oPlayer(5, "zhangsan");
-    state["addplayer"](oPlayer);
-
-    int num3 = state["test"]["main"]["dowork"](&oPlayer);
-
-    auto script_result = state.safe_script(R"(
         local interface = require("interface")
 
         local p = interface.CPlayer.new()
@@ -92,61 +135,5 @@ TEST(DoSolModule, DoSolModule)
         p:SetHP(interface.GNextID())
         print("[4]" .. p:GetHP())
         print("[5]" .. interface.CPlayer.NextID())
-        )", sol::script_throw_on_error);
-    ASSERT_TRUE(script_result.valid());
-}
-
-TEST(DoSol, DoSol)
-{
-    CDMLuaEngine oDMLuaEngine;
-
-    std::string strScriptRootPath = DMGetRootPath();
-    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
-
-    oDMLuaEngine.AddModule(require_interface);
-
-    if (!oDMLuaEngine.ReloadScript())
-    {
-        ASSERT_TRUE(0);
-        return;
-    }
-
-    oDMLuaEngine.DoString(R"(
-        function add(a , b)
-            return a + b
-        end
         )");
-
-    oDMLuaEngine.DoString(R"(
-        function addplayer(player)
-            print("[addplayer]: " .. player:GetName())
-            return 1
-        end
-        )");
-
-    auto state = oDMLuaEngine.GetSol();
-
-    int num = state["add"](1, 2);
-
-    CPlayer oPlayer(5, "zhangsan");
-    int ret = state["test"]["main"]["dowork"](&oPlayer);
-
-    int ret2 = state["addplayer"](oPlayer);
-
-    auto script_result = state.safe_script(R"(
-        local interface = require("interface")
-
-        local p = interface.CPlayer.new()
-        p:Init()
-        p:NotChange()
-        p:OnChange()
-        print("[1]" .. interface.GNextID())
-        print("[2]" .. p.NextID())
-        p:SetObjID(interface.GNextID())
-        print("[3]" .. p:GetObjID())
-        p:SetHP(interface.GNextID())
-        print("[4]" .. p:GetHP())
-        print("[5]" .. interface.CPlayer.NextID())
-        )", sol::script_throw_on_error);
-    ASSERT_TRUE(script_result.valid());
 }
