@@ -3,6 +3,9 @@
 #include "interface.sol.h"
 #include "player.h"
 #include "dmsolpp.h"
+#include "dmformat.h"
+
+#define PERF_COUNT (200000 * 100)
 
 TEST(DoSolpp, DoSolpp)
 {
@@ -155,4 +158,83 @@ TEST(DoluaEngine, DoluaEngine)
         )");
 
     int num = oDMLuaEngine.CallT<int>("add", 1, 2);
+}
+
+TEST(DoCallTest4tolua, DoCallTest4tolua)
+{
+    // 使用接口的方式提供所有功能。
+    auto module = dmsolppGetModule();
+    if (nullptr == module)
+    {
+        return;
+    }
+
+    CDMLuaEngine& oDMLuaEngine = module->GetDMLuaEngine();
+
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
+
+    oDMLuaEngine.AddModule(require_interface);
+
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
+
+    // 测试普通lua全局函数
+    oDMLuaEngine.DoString(R"(
+        function add(a , b)
+            return a + b
+        end
+        )");
+    uint64_t total = 0;
+    for (int i=0; i < PERF_COUNT; i++)
+    {
+        int num = oDMLuaEngine.CallT<int>("add", 1, 2);
+        total += num;
+    }
+
+    fmt::print("total = {}", total);
+}
+
+TEST(DoCallTest4sol, DoCallTest4sol)
+{
+    // 使用接口的方式提供所有功能。
+    auto module = dmsolppGetModule();
+    if (nullptr == module)
+    {
+        return;
+    }
+
+    CDMLuaEngine& oDMLuaEngine = module->GetDMLuaEngine();
+
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
+
+    oDMLuaEngine.AddModule(require_interface);
+
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
+
+    // 测试普通lua全局函数
+    oDMLuaEngine.DoString(R"(
+        function add(a , b)
+            return a + b
+        end
+        )");
+
+    auto state = oDMLuaEngine.GetSol();
+    auto add = state["add"];
+    uint64_t total = 0;
+    for (int i = 0; i < PERF_COUNT; i++)
+    {
+        int num = add(1, 2);
+        total += num;
+    }
+
+    fmt::print("total = {}", total);
 }
