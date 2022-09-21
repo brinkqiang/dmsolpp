@@ -5,9 +5,7 @@
 #include "dmsolpp.h"
 #include "dmformat.h"
 
-#define PERF_COUNT (200000 * 100)
-
-TEST(DoSolpp, DoSolpp)
+TEST(dmluatest_solpp, dmluatest_solpp)
 {
     CDMLuaEngine oDMLuaEngine;
 
@@ -89,7 +87,7 @@ TEST(DoSolpp, DoSolpp)
 }
 
 
-TEST(DoluaEngine, DoluaEngine)
+TEST(dmluatest_engine, dmluatest_engine)
 {
     // 使用接口的方式提供所有功能。
     auto module = dmsolppGetModule();
@@ -160,7 +158,9 @@ TEST(DoluaEngine, DoluaEngine)
     int num = oDMLuaEngine.CallT<int>("add", 1, 2);
 }
 
-TEST(DoCallTest4tolua, DoCallTest4tolua)
+const int PERF_COUNT = 1000 * 10000;
+
+TEST(dmluatest_tolua_perf, dmluatest_tolua_perf)
 {
     // 使用接口的方式提供所有功能。
     auto module = dmsolppGetModule();
@@ -198,7 +198,7 @@ TEST(DoCallTest4tolua, DoCallTest4tolua)
     fmt::print("total = {}", total);
 }
 
-TEST(DoCallTest4sol, DoCallTest4sol)
+TEST(dmluatest_sol_perf, dmluatest_sol_perf)
 {
     // 使用接口的方式提供所有功能。
     auto module = dmsolppGetModule();
