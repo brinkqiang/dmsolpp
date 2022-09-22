@@ -2,11 +2,11 @@
 #ifndef __ENUM_H_INCLUDE__
 #define __ENUM_H_INCLUDE__
 
-// tosol_begin
+// export_begin
 
 typedef enum {
     eTaskStateStart,
     eTaskStateEnd,
 } ETaskState;
-// tosol_end
+// export_end
 #endif // __ENUM_H_INCLUDE__

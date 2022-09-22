@@ -8,7 +8,7 @@
 
 struct STaskInfo {
 
-    // tosol_begin
+    // export_begin
     STaskInfo()
         : nTaskID( 0 ),
           nTaskState( 0 ),
@@ -21,14 +21,14 @@ struct STaskInfo {
     int nTaskID;
     int nTaskState;
     int nTaskCondition;
-    // tosol_end
+    // export_end
 };
 
 typedef std::map<int, STaskInfo>    TaskInfoMap;
 typedef TaskInfoMap::iterator       TaskInfoMapIt;
 
 struct SPos {
-    // tosol_begin
+    // export_begin
     SPos()
         : x( 0 ),
           y( 0 ),
@@ -46,7 +46,7 @@ struct SPos {
     int x;
     int y;
     int z;
-    // tosol_end
+    // export_end
 };
 
 #endif // __STRUCT_H_INCLUDE__

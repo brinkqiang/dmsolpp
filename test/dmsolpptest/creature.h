@@ -7,7 +7,7 @@
 class CCreature : public virtual CObject
 {
 public:
-// tosol_begin
+// export_begin
     CCreature(): m_llHP(0), m_llMP(0){}
     virtual ~CCreature(){}
 
@@ -17,7 +17,7 @@ public:
     int64_t GetHP(){ return m_llHP;}
     int64_t GetMP(){ return m_llMP;}
 
-// tosol_end
+// export_end
 private:
     int64_t m_llHP;
     int64_t m_llMP;

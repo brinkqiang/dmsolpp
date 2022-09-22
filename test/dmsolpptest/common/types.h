@@ -1,7 +1,7 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-// tosol_begin
+// export_begin
 
 typedef unsigned char UINT8;
 typedef short INT16;
@@ -27,7 +27,7 @@ typedef unsigned long long int UINT64;
 #define FMT_64X "%llx"
 #endif
 
-// tosol_end
+// export_end
 
 #endif
 

@@ -7,12 +7,12 @@
 class CObject
 {
 public:
-// tosol_begin
+// export_begin
     CObject(): m_objID(0){}
     virtual ~CObject(){}
     uint64_t GetObjID(){ return m_objID;}
     void SetObjID(uint64_t id){ m_objID = id;}
-// tosol_end
+// export_end
 private:
     uint64_t m_objID;
 };
