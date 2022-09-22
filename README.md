@@ -24,7 +24,9 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 ## Intro
 dmsolpp
 
-flags & // export_begin // export_end
+export flags
+// export_begin
+// export_end
 ```
 #ifndef __OBJECT_H_INCLUDE__
 #define __OBJECT_H_INCLUDE__
