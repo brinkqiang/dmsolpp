@@ -3,6 +3,7 @@
 #define __PLAYER_MGR_H__
 
 #include "player.h"
+#include <map>
 
 class CPlayerMgr
 {

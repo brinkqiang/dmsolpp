@@ -2,12 +2,11 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include "person.pb.h"
 #include "creature.h"
+#include <cstdint>
+#include <string>
 
 uint64_t GNextID();
-
-
 
 class CPlayer : public virtual CCreature
 {
@@ -24,14 +23,12 @@ public:
     virtual void OnChange();
     void NotChange();
     void SystemChange();
-    void LoadFromDB(db::tb_person& data);
-    void SaveDB(db::tb_person& data);
+    void LoadFromDB();
+    void SaveDB();
     std::string GetName(){ return m_strName; };
     static uint64_t NextID();
     // export_end
 private:
-    db::tb_person m_data_v1;
-    db::tb_person m_data_v2;
     std::string m_strName;
     int m_level;
 };

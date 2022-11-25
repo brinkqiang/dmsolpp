@@ -2,7 +2,7 @@
 #ifndef __OBJECT_H_INCLUDE__
 #define __OBJECT_H_INCLUDE__
 
-#include <stdint.h>
+#include <cstdint>
 
 class CObject
 {
