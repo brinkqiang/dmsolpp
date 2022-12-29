@@ -5,9 +5,9 @@
 #include "creature.h"
 #include <cstdint>
 #include <string>
-
+// export_begin
 uint64_t GNextID();
-
+// export_end
 class CPlayer : public virtual CCreature
 {
 public:

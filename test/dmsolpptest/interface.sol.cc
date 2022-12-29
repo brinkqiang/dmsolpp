@@ -57,6 +57,7 @@ namespace lua_module_interface
             , "GetMP", sol::make_reference<sol::function>(lua.lua_state(), &CCreature::GetMP)
             
             );
+        module.set_function("GNextID",&GNextID);
         module.new_usertype<CPlayer>(
             "CPlayer"
             , sol::constructors<CPlayer(),CPlayer(int,const std::string&),CPlayer(const std::string&)>()
