@@ -30,6 +30,7 @@
 #include <vector>
 #include <algorithm>
 #include <typeinfo>
+#include <limits>
 
 #include "lua.hpp"
 #include "tolua++.h"
