@@ -26,6 +26,7 @@
 
 #include "common/template.h"
 
+#include <limits>
 
 #include "sol/sol.hpp"
 
