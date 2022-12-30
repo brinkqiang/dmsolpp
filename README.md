@@ -163,7 +163,7 @@ interface.sol.cc
 // source: interface.pkg
 
 #include "interface.sol.h"
-
+#include <limits>
 
 #include "object.h"
 
