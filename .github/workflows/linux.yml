@@ -1,6 +1,6 @@
 name: linux
 
-on: [push, delete, create]
+on: [workflow_dispatch]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -22,9 +22,20 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H%M')"
 
+      - name: Install dependencies (ubuntu)
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build cmake zip
+          sudo apt-get install autopoint
+          
+          ninja --version
+          cmake --version
+          gcc --version
+
       - name: Create Build Environment
-        shell: bash
-        run: sudo apt install autopoint && cmake -E make_directory ${{runner.workspace}}/build
+        run: |
+          cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
         shell: bash

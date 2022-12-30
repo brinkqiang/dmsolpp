@@ -1,6 +1,6 @@
 name: mac
 
-on: [push, delete, create]
+on: [workflow_dispatch]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -21,6 +21,20 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H%M')"
+
+      - name: Install dependencies (macos)
+        if: startsWith(matrix.os, 'macos-latest')
+        run: |
+          brew install cmake
+          brew install ninja
+          brew install zip
+          brew install autoconf
+          brew install automake
+          brew install libtool
+
+          ninja --version
+          cmake --version
+          gcc --version
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
