@@ -96,7 +96,7 @@ TEST(dmluatest_engine, dmluatest_engine)
         return;
     }
 
-    CDMLuaEngine& oDMLuaEngine = module->GetDMLuaEngine();
+    CDMLuaEngine& oDMLuaEngine = *module->GetDMLuaEngine();
 
     std::string strScriptRootPath = DMGetRootPath();
     oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
@@ -169,7 +169,7 @@ TEST(dmluatest_tolua_perf, dmluatest_tolua_perf)
         return;
     }
 
-    CDMLuaEngine& oDMLuaEngine = module->GetDMLuaEngine();
+    CDMLuaEngine& oDMLuaEngine = *module->GetDMLuaEngine();
 
     std::string strScriptRootPath = DMGetRootPath();
     oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");
@@ -207,7 +207,7 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
         return;
     }
 
-    CDMLuaEngine& oDMLuaEngine = module->GetDMLuaEngine();
+    CDMLuaEngine& oDMLuaEngine = *module->GetDMLuaEngine();
 
     std::string strScriptRootPath = DMGetRootPath();
     oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR + "script");

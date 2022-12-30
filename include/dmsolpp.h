@@ -33,7 +33,7 @@ public:
 	
     virtual void DMAPI Test(void) = 0;
 
-    virtual CDMLuaEngine& DMAPI GetDMLuaEngine() = 0;
+    virtual CDMLuaEngine* DMAPI GetDMLuaEngine() = 0;
 
     virtual sol::state_view DMAPI GetSolEngine() = 0;
 };

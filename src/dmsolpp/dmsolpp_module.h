@@ -33,9 +33,7 @@ public:
 	
     virtual void DMAPI Test(void);	
 
-    virtual CDMLuaEngine& DMAPI GetDMLuaEngine();
+    virtual CDMLuaEngine* DMAPI GetDMLuaEngine();
 
     virtual sol::state_view DMAPI GetSolEngine();
-private:
-    CDMLuaEngine m_oDMLuaEngine;
 };

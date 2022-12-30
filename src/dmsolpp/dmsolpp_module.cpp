@@ -45,15 +45,15 @@ void DMAPI Cdmsolpp_module::Test(void)
 }
 
 
-CDMLuaEngine& DMAPI Cdmsolpp_module::GetDMLuaEngine()
+CDMLuaEngine* DMAPI Cdmsolpp_module::GetDMLuaEngine()
 {
-    return m_oDMLuaEngine;
+    return CDMLuaEngine::Instance();
 }
 
 
 sol::state_view DMAPI Cdmsolpp_module::GetSolEngine()
 {
-    return m_oDMLuaEngine.GetSol();
+    return CDMLuaEngine::Instance()->GetSol();
 }
 
 Idmsolpp* DMAPI dmsolppGetModule()
