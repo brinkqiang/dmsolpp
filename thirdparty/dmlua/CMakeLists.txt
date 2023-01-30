@@ -14,8 +14,10 @@ ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
 LuaModuleImport("${LUA_MODULE}" "libtolua" "src/libtolua" "")
 
-ExeImport("tool" "${LUA_MODULE};libtolua")
-ExeImport("samples" "${LUA_MODULE};libtolua")
+IF (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    ExeImport("tool" "${LUA_MODULE};libtolua")
+    ExeImport("samples" "${LUA_MODULE};libtolua")
+ENDIF()
 
 IF (WIN32)
 ADD_CUSTOM_COMMAND(
