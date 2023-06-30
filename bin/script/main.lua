@@ -1,4 +1,3 @@
-module(..., package.seeall)
 
 local interface = require("interface")
 
