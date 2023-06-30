@@ -243,8 +243,8 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
 
     fmt::print("total = {}\n", total);
     sol::object list  = add_list(1,2,3);
-    auto ret = list.as<std::vector<double>>();
-    for (auto value : ret)
+    sol::as_table_t<std::vector<double>> ret = list.as<std::vector<double>>();
+    for (auto value : ret.value())
     {
         fmt::print("{}\n", value);
     }
