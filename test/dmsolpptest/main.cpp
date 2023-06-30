@@ -158,7 +158,7 @@ TEST(dmluatest_engine, dmluatest_engine)
     int num = oDMLuaEngine.CallT<int>("add", 1, 2);
 }
 
-const int PERF_COUNT = 1000 * 10000;
+const int PERF_COUNT = 1 * 10000;
 
 TEST(dmluatest_tolua_perf, dmluatest_tolua_perf)
 {
@@ -195,7 +195,7 @@ TEST(dmluatest_tolua_perf, dmluatest_tolua_perf)
         total += num;
     }
 
-    fmt::print("total = {}", total);
+    fmt::print("total = {}\n", total);
 }
 
 TEST(dmluatest_sol_perf, dmluatest_sol_perf)
@@ -225,10 +225,15 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
         function add(a , b)
             return a + b
         end
+        function add_list(...)
+          return {...}
+        end
         )");
 
     auto state = oDMLuaEngine.GetSol();
     auto add = state["add"];
+    auto add_list = state["add_list"];
+
     uint64_t total = 0;
     for (int i = 0; i < PERF_COUNT; i++)
     {
@@ -236,5 +241,8 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
         total += num;
     }
 
-    fmt::print("total = {}", total);
+    fmt::print("total = {}\n", total);
+    sol::object list  = add_list(1,2,3);
+    auto ret = list.as<std::vector<double>>();
+ 
 }
