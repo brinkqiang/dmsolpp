@@ -280,6 +280,5 @@ LUA_API int require_interface(lua_State* L)
 
 ```
 ## Contacts
-[![Join the chat](https://badges.gitter.im/brinkqiang/dmsolpp/Lobby.svg)](https://gitter.im/brinkqiang/dmsolpp)
 
 ## Thanks
