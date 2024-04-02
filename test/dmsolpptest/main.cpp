@@ -225,14 +225,10 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
         function add(a , b)
             return a + b
         end
-        function add_list(...)
-          return {...}
-        end
         )");
 
     auto state = oDMLuaEngine.GetSol();
     auto add = state["add"];
-    auto add_list = state["add_list"];
 
     uint64_t total = 0;
     for (int i = 0; i < PERF_COUNT; i++)
@@ -242,9 +238,5 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
     }
 
     fmt::print("total = {}\n", total);
-    //sol::as_table_t<std::vector<double>> ret  = add_list(1,2,3);
-    //for (auto value : ret.value())
-    //{
-    //    fmt::print("{}\n", value);
-    //}
+
 }
