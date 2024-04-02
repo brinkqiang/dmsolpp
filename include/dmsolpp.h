@@ -22,7 +22,6 @@
 #ifndef __DMSOLPP_H_INCLUDE__
 #define __DMSOLPP_H_INCLUDE__
 
-#include "dmos.h"
 #include "dmlua.h"
 
 class Idmsolpp
