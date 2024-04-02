@@ -20,11 +20,12 @@ OPTION(USE_DMSOLPP "use dmsolpp" OFF)
 SET(LUA_MODULE lua54)
 ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
+ModuleInclude("dmlua" "thirdparty/dmlua/src/${LUA_MODULE}")
+ModuleInclude("dmlua" "thirdparty/dmlua/src/libtolua")
+
 ModuleImport("dmtest" "thirdparty/dmtest")
 ModuleImport("dmlua" "thirdparty/dmlua")
 ModuleImport("dmformat" "thirdparty/dmformat")
-ModuleInclude("dmlua" "thirdparty/dmlua/src/${LUA_MODULE}")
-ModuleInclude("dmlua" "thirdparty/dmlua/src/libtolua")
 
 LibImport("dmsolpp" "src/dmsolpp")
 ExeImport("test" "dmsolpp;dmtest;${LUA_MODULE};libtolua")
