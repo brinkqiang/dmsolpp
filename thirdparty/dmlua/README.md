@@ -156,7 +156,6 @@ TEST(luabasetest, luabasetest)
 }
 ```
 ## Contacts
-[![Join the chat](https://badges.gitter.im/brinkqiang/dmlua/Lobby.svg)](https://gitter.im/brinkqiang/dmlua)
 
 ## Thanks
 gavingqf@126.com
