@@ -21,9 +21,9 @@ _basic = {
  ['short'] = 'number',
  ['long'] = 'number',
  ['unsigned'] = 'number',
- ['__int64'] = 'number',
- ['int64_t'] = 'number',
- ['uint64_t'] = 'number',
+ ['__int64'] = 'integer',
+ ['int64_t'] = 'integer',
+ ['uint64_t'] = 'integer',
  ['float'] = 'number',
  ['double'] = 'number',
  ['_cstring'] = 'string',
@@ -39,6 +39,7 @@ _basic = {
 }
 
 _basic_ctype = {
+ integer = "lua_Integer",
  number = "lua_Number",
  string = "const char*",
  userdata = "void*",

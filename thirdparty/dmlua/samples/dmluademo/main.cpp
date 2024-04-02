@@ -54,12 +54,13 @@ TEST(luabasetest, luabasetest)
     {
         for (int i = 0; i < 1; ++i)
         {
-            uint64_t r = oDMLuaEngine.CallT<uint64_t>("addex", 4294967295ULL,
-                         4294967295ULL);
+            uint64_t r = oDMLuaEngine.CallT<uint64_t>("addex", 4294967295,
+                4294967295);
 
             if (r >= 0)
             {
                 std::cout << r << std::endl;
+                EXPECT_TRUE(r == 4294967295ULL * 4294967295ULL);
             }
         }
     }
@@ -119,14 +120,44 @@ TEST(luabasetest, luabasetest)
     unsigned int dwTaskID = 100;
 
     LResultINT oResult(-1);
-    oDMLuaEngine.Call("script.task.task.AcceptTask", poRole, dwTaskID, &oResult);
+    oDMLuaEngine.Call("script.task.task.AcceptTask", poRole->GetObjID(), dwTaskID, &oResult);
 
-    oDMLuaEngine.Call("script.task.task.FinishTask", poRole, dwTaskID);
+    oDMLuaEngine.Call("script.task.task.FinishTask", poRole->GetObjID(), dwTaskID);
     std::vector<std::string> vecData;
     vecData.push_back("hello");
     oDMLuaEngine.Call("script.common.test.main_vector", &vecData);
     oDMLuaEngine.Call("script.common.test.main");
+    oDMLuaEngine.Call("script.common.clone.main");
     CRoleMgr::Instance()->ReleaseRole(poRole);
+}
+
+
+TEST(luatype, luatype) {
+    CDMLuaEngine oDMLuaEngine;
+    /// The default search path is to search the root directory with the exe program /../ relative path (because cmake will add the $BUILD_TYPE directory to the generated bin directory.)
+    /// If you need to modify to other paths, please set your own search path
+
+    std::string strScriptRootPath = DMGetRootPath();
+    oDMLuaEngine.SetRootPath(strScriptRootPath + PATH_DELIMITER_STR + ".." + PATH_DELIMITER_STR);
+
+    oDMLuaEngine.AddModule(tolua_interface_open);
+
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
+    char chData = 1;
+    uint16_t wData = 2;
+    uint32_t dwData = 3;
+    uint64_t qwData = 12345678987654321;
+    int16_t sData = 5;
+    int32_t nData = 6;
+    int64_t llData = 7;
+    float fData = 8;
+    double dbData = 12345678987654321;
+
+    oDMLuaEngine.Call("script.type.type.TypeTest", chData, wData, dwData, qwData, sData, nData, llData, fData, dbData);
 }
 //
 //TEST(luaload, luaload) {

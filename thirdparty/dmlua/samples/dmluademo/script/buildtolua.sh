@@ -1,2 +1,2 @@
 #!/bin/sh
-tolua++ -t -n interface -o interface.cpp -H interface.h interface.pkg
+./toluapp -t -n interface -o interface.cpp -H interface.h interface.pkg

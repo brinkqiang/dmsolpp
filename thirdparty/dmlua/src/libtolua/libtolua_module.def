@@ -6,6 +6,7 @@ EXPORTS
     tolua_isvaluenil
     tolua_isboolean
     tolua_isnumber
+    tolua_isinteger
     tolua_isstring
     tolua_istable
     tolua_isusertable
@@ -34,6 +35,7 @@ EXPORTS
     tolua_pushvalue
     tolua_pushboolean
     tolua_pushnumber
+    tolua_pushinteger
     tolua_pushstring
     tolua_pushlstring
     tolua_pushuserdata

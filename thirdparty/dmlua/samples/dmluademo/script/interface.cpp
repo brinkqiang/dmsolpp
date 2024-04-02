@@ -32,55 +32,6 @@ static int tolua_collect_LuaResult_double_ (lua_State* tolua_S)
 	return 0;
 }
 
-static int tolua_collect_std__vector_int64_t_ (lua_State* tolua_S)
-{
- std::vector<int64_t>* self = (std::vector<int64_t>*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_LuaResult_std__string_ (lua_State* tolua_S)
-{
- LuaResult<std::string>* self = (LuaResult<std::string>*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_STaskInfo (lua_State* tolua_S)
-{
- STaskInfo* self = (STaskInfo*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_std__vector_int_ (lua_State* tolua_S)
-{
- std::vector<int>* self = (std::vector<int>*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_CRole (lua_State* tolua_S)
-{
- CRole* self = (CRole*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_LuaResult_int64_t_ (lua_State* tolua_S)
-{
- LuaResult<int64_t>* self = (LuaResult<int64_t>*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
-static int tolua_collect_std__vector_double_ (lua_State* tolua_S)
-{
- std::vector<double>* self = (std::vector<double>*) tolua_tousertype(tolua_S,1,0);
-	Mtolua_delete(self);
-	return 0;
-}
-
 static int tolua_collect_std__vector_std__string_ (lua_State* tolua_S)
 {
  std::vector<std::string>* self = (std::vector<std::string>*) tolua_tousertype(tolua_S,1,0);
@@ -88,9 +39,9 @@ static int tolua_collect_std__vector_std__string_ (lua_State* tolua_S)
 	return 0;
 }
 
-static int tolua_collect_LuaResult_uint64_t_ (lua_State* tolua_S)
+static int tolua_collect_CObj (lua_State* tolua_S)
 {
- LuaResult<uint64_t>* self = (LuaResult<uint64_t>*) tolua_tousertype(tolua_S,1,0);
+ CObj* self = (CObj*) tolua_tousertype(tolua_S,1,0);
 	Mtolua_delete(self);
 	return 0;
 }
@@ -102,9 +53,44 @@ static int tolua_collect_SPos (lua_State* tolua_S)
 	return 0;
 }
 
+static int tolua_collect_CRole (lua_State* tolua_S)
+{
+ CRole* self = (CRole*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
 static int tolua_collect_LuaResult_int_ (lua_State* tolua_S)
 {
  LuaResult<int>* self = (LuaResult<int>*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_LuaResult_uint64_t_ (lua_State* tolua_S)
+{
+ LuaResult<uint64_t>* self = (LuaResult<uint64_t>*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_STaskInfo (lua_State* tolua_S)
+{
+ STaskInfo* self = (STaskInfo*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_std__vector_double_ (lua_State* tolua_S)
+{
+ std::vector<double>* self = (std::vector<double>*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_std__vector_int64_t_ (lua_State* tolua_S)
+{
+ std::vector<int64_t>* self = (std::vector<int64_t>*) tolua_tousertype(tolua_S,1,0);
 	Mtolua_delete(self);
 	return 0;
 }
@@ -116,9 +102,23 @@ static int tolua_collect_std__vector_uint64_t_ (lua_State* tolua_S)
 	return 0;
 }
 
-static int tolua_collect_CObj (lua_State* tolua_S)
+static int tolua_collect_LuaResult_int64_t_ (lua_State* tolua_S)
 {
- CObj* self = (CObj*) tolua_tousertype(tolua_S,1,0);
+ LuaResult<int64_t>* self = (LuaResult<int64_t>*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_LuaResult_std__string_ (lua_State* tolua_S)
+{
+ LuaResult<std::string>* self = (LuaResult<std::string>*) tolua_tousertype(tolua_S,1,0);
+	Mtolua_delete(self);
+	return 0;
+}
+
+static int tolua_collect_std__vector_int_ (lua_State* tolua_S)
+{
+ std::vector<int>* self = (std::vector<int>*) tolua_tousertype(tolua_S,1,0);
 	Mtolua_delete(self);
 	return 0;
 }
@@ -130,32 +130,32 @@ static void tolua_reg_types (lua_State* tolua_S)
 {
  tolua_usertype(tolua_S,"LuaResult<double>");
  Mtolua_typeid< LuaResult<double> >(tolua_S, "LuaResult<double>");
- tolua_usertype(tolua_S,"std::vector<int64_t>");
- Mtolua_typeid< std::vector<int64_t> >(tolua_S, "std::vector<int64_t>");
- tolua_usertype(tolua_S,"LuaResult<std::string>");
- Mtolua_typeid< LuaResult<std::string> >(tolua_S, "LuaResult<std::string>");
- tolua_usertype(tolua_S,"STaskInfo");
- Mtolua_typeid< STaskInfo >(tolua_S, "STaskInfo");
- tolua_usertype(tolua_S,"std::vector<int>");
- Mtolua_typeid< std::vector<int> >(tolua_S, "std::vector<int>");
- tolua_usertype(tolua_S,"CRole");
- Mtolua_typeid< CRole >(tolua_S, "CRole");
- tolua_usertype(tolua_S,"LuaResult<int64_t>");
- Mtolua_typeid< LuaResult<int64_t> >(tolua_S, "LuaResult<int64_t>");
- tolua_usertype(tolua_S,"std::vector<double>");
- Mtolua_typeid< std::vector<double> >(tolua_S, "std::vector<double>");
  tolua_usertype(tolua_S,"std::vector<std::string>");
  Mtolua_typeid< std::vector<std::string> >(tolua_S, "std::vector<std::string>");
- tolua_usertype(tolua_S,"LuaResult<uint64_t>");
- Mtolua_typeid< LuaResult<uint64_t> >(tolua_S, "LuaResult<uint64_t>");
- tolua_usertype(tolua_S,"SPos");
- Mtolua_typeid< SPos >(tolua_S, "SPos");
- tolua_usertype(tolua_S,"LuaResult<int>");
- Mtolua_typeid< LuaResult<int> >(tolua_S, "LuaResult<int>");
- tolua_usertype(tolua_S,"std::vector<uint64_t>");
- Mtolua_typeid< std::vector<uint64_t> >(tolua_S, "std::vector<uint64_t>");
  tolua_usertype(tolua_S,"CObj");
  Mtolua_typeid< CObj >(tolua_S, "CObj");
+ tolua_usertype(tolua_S,"SPos");
+ Mtolua_typeid< SPos >(tolua_S, "SPos");
+ tolua_usertype(tolua_S,"CRole");
+ Mtolua_typeid< CRole >(tolua_S, "CRole");
+ tolua_usertype(tolua_S,"LuaResult<int>");
+ Mtolua_typeid< LuaResult<int> >(tolua_S, "LuaResult<int>");
+ tolua_usertype(tolua_S,"LuaResult<uint64_t>");
+ Mtolua_typeid< LuaResult<uint64_t> >(tolua_S, "LuaResult<uint64_t>");
+ tolua_usertype(tolua_S,"STaskInfo");
+ Mtolua_typeid< STaskInfo >(tolua_S, "STaskInfo");
+ tolua_usertype(tolua_S,"std::vector<double>");
+ Mtolua_typeid< std::vector<double> >(tolua_S, "std::vector<double>");
+ tolua_usertype(tolua_S,"std::vector<int64_t>");
+ Mtolua_typeid< std::vector<int64_t> >(tolua_S, "std::vector<int64_t>");
+ tolua_usertype(tolua_S,"std::vector<uint64_t>");
+ Mtolua_typeid< std::vector<uint64_t> >(tolua_S, "std::vector<uint64_t>");
+ tolua_usertype(tolua_S,"LuaResult<int64_t>");
+ Mtolua_typeid< LuaResult<int64_t> >(tolua_S, "LuaResult<int64_t>");
+ tolua_usertype(tolua_S,"LuaResult<std::string>");
+ Mtolua_typeid< LuaResult<std::string> >(tolua_S, "LuaResult<std::string>");
+ tolua_usertype(tolua_S,"std::vector<int>");
+ Mtolua_typeid< std::vector<int> >(tolua_S, "std::vector<int>");
 }
 
 /* get function: value of class  LuaResult<int> */
@@ -282,7 +282,7 @@ static int tolua_get_LuaResult_int64_t__value(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in accessing variable 'value'",NULL);
 #endif
-  tolua_pushnumber(tolua_S,(lua_Number)self->value);
+  tolua_pushinteger(tolua_S,(lua_Integer)self->value);
  return 1;
 }
 #endif //#ifndef TOLUA_DISABLE
@@ -295,10 +295,10 @@ static int tolua_set_LuaResult_int64_t__value(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
   tolua_Error tolua_err;
   if (!self) tolua_error(tolua_S,"invalid 'self' in accessing variable 'value'",NULL);
-  if (!tolua_isnumber(tolua_S,2,0,&tolua_err))
+  if (!tolua_isinteger(tolua_S,2,0,&tolua_err))
    tolua_error(tolua_S,"#vinvalid type in variable assignment.",&tolua_err);
 #endif
-  self->value = ((int64_t)  tolua_tonumber(tolua_S,2,0))
+  self->value = ((int64_t)  tolua_tointeger(tolua_S,2,0))
 ;
  return 0;
 }
@@ -398,7 +398,7 @@ static int tolua_get_LuaResult_uint64_t__value(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in accessing variable 'value'",NULL);
 #endif
-  tolua_pushnumber(tolua_S,(lua_Number)self->value);
+  tolua_pushinteger(tolua_S,(lua_Integer)self->value);
  return 1;
 }
 #endif //#ifndef TOLUA_DISABLE
@@ -411,10 +411,10 @@ static int tolua_set_LuaResult_uint64_t__value(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
   tolua_Error tolua_err;
   if (!self) tolua_error(tolua_S,"invalid 'self' in accessing variable 'value'",NULL);
-  if (!tolua_isnumber(tolua_S,2,0,&tolua_err))
+  if (!tolua_isinteger(tolua_S,2,0,&tolua_err))
    tolua_error(tolua_S,"#vinvalid type in variable assignment.",&tolua_err);
 #endif
-  self->value = ((uint64_t)  tolua_tonumber(tolua_S,2,0))
+  self->value = ((uint64_t)  tolua_tointeger(tolua_S,2,0))
 ;
  return 0;
 }
@@ -1101,7 +1101,7 @@ static int tolua_interface_std_vector_int64_t___geti00(lua_State* tolua_S)
 #endif
   {
    const int64_t tolua_ret = (const int64_t)  self->operator[](index);
-   tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
+   tolua_pushinteger(tolua_S,(lua_Integer)tolua_ret);
   }
  }
  return 1;
@@ -1122,7 +1122,7 @@ static int tolua_interface_std_vector_int64_t___seti00(lua_State* tolua_S)
  if (
      !tolua_isusertype(tolua_S,1,"std::vector<int64_t>",0,&tolua_err) ||
      !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,3,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,3,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,4,&tolua_err)
  )
   goto tolua_lerror;
@@ -1131,7 +1131,7 @@ static int tolua_interface_std_vector_int64_t___seti00(lua_State* tolua_S)
  {
   std::vector<int64_t>* self = (std::vector<int64_t>*)  tolua_tousertype(tolua_S,1,0);
   int index = ((int)  tolua_tonumber(tolua_S,2,0));
-  int64_t tolua_value = ((int64_t)  tolua_tonumber(tolua_S,3,0));
+  int64_t tolua_value = ((int64_t)  tolua_tointeger(tolua_S,3,0));
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in function 'operator&[]'", NULL);
 #endif
@@ -1166,7 +1166,7 @@ static int tolua_interface_std_vector_int64_t___geti01(lua_State* tolua_S)
 #endif
   {
    int64_t tolua_ret = (int64_t)  self->operator[](index);
-   tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
+   tolua_pushinteger(tolua_S,(lua_Integer)tolua_ret);
   }
  }
  return 1;
@@ -1183,7 +1183,7 @@ static int tolua_interface_std_vector_int64_t__push_back00(lua_State* tolua_S)
  tolua_Error tolua_err;
  if (
      !tolua_isusertype(tolua_S,1,"std::vector<int64_t>",0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,2,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,3,&tolua_err)
  )
   goto tolua_lerror;
@@ -1191,7 +1191,7 @@ static int tolua_interface_std_vector_int64_t__push_back00(lua_State* tolua_S)
 #endif
  {
   std::vector<int64_t>* self = (std::vector<int64_t>*)  tolua_tousertype(tolua_S,1,0);
-  int64_t val = ((int64_t)  tolua_tonumber(tolua_S,2,0));
+  int64_t val = ((int64_t)  tolua_tointeger(tolua_S,2,0));
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in function 'push_back'", NULL);
 #endif
@@ -1379,7 +1379,7 @@ static int tolua_interface_std_vector_uint64_t___geti00(lua_State* tolua_S)
 #endif
   {
    const uint64_t tolua_ret = (const uint64_t)  self->operator[](index);
-   tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
+   tolua_pushinteger(tolua_S,(lua_Integer)tolua_ret);
   }
  }
  return 1;
@@ -1400,7 +1400,7 @@ static int tolua_interface_std_vector_uint64_t___seti00(lua_State* tolua_S)
  if (
      !tolua_isusertype(tolua_S,1,"std::vector<uint64_t>",0,&tolua_err) ||
      !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,3,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,3,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,4,&tolua_err)
  )
   goto tolua_lerror;
@@ -1409,7 +1409,7 @@ static int tolua_interface_std_vector_uint64_t___seti00(lua_State* tolua_S)
  {
   std::vector<uint64_t>* self = (std::vector<uint64_t>*)  tolua_tousertype(tolua_S,1,0);
   int index = ((int)  tolua_tonumber(tolua_S,2,0));
-  uint64_t tolua_value = ((uint64_t)  tolua_tonumber(tolua_S,3,0));
+  uint64_t tolua_value = ((uint64_t)  tolua_tointeger(tolua_S,3,0));
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in function 'operator&[]'", NULL);
 #endif
@@ -1444,7 +1444,7 @@ static int tolua_interface_std_vector_uint64_t___geti01(lua_State* tolua_S)
 #endif
   {
    uint64_t tolua_ret = (uint64_t)  self->operator[](index);
-   tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
+   tolua_pushinteger(tolua_S,(lua_Integer)tolua_ret);
   }
  }
  return 1;
@@ -1461,7 +1461,7 @@ static int tolua_interface_std_vector_uint64_t__push_back00(lua_State* tolua_S)
  tolua_Error tolua_err;
  if (
      !tolua_isusertype(tolua_S,1,"std::vector<uint64_t>",0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,2,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,3,&tolua_err)
  )
   goto tolua_lerror;
@@ -1469,7 +1469,7 @@ static int tolua_interface_std_vector_uint64_t__push_back00(lua_State* tolua_S)
 #endif
  {
   std::vector<uint64_t>* self = (std::vector<uint64_t>*)  tolua_tousertype(tolua_S,1,0);
-  uint64_t val = ((uint64_t)  tolua_tonumber(tolua_S,2,0));
+  uint64_t val = ((uint64_t)  tolua_tointeger(tolua_S,2,0));
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in function 'push_back'", NULL);
 #endif
@@ -2633,7 +2633,7 @@ static int tolua_interface_CObj_SetObjID00(lua_State* tolua_S)
  tolua_Error tolua_err;
  if (
      !tolua_isusertype(tolua_S,1,"CObj",0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,2,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,3,&tolua_err)
  )
   goto tolua_lerror;
@@ -2641,7 +2641,7 @@ static int tolua_interface_CObj_SetObjID00(lua_State* tolua_S)
 #endif
  {
   CObj* self = (CObj*)  tolua_tousertype(tolua_S,1,0);
-  uint64_t qwObjID = ((uint64_t)  tolua_tonumber(tolua_S,2,0));
+  uint64_t qwObjID = ((uint64_t)  tolua_tointeger(tolua_S,2,0));
 #ifndef TOLUA_RELEASE
   if (!self) tolua_error(tolua_S,"invalid 'self' in function 'SetObjID'", NULL);
 #endif
@@ -2678,7 +2678,7 @@ static int tolua_interface_CObj_GetObjID00(lua_State* tolua_S)
 #endif
   {
    uint64_t tolua_ret = (uint64_t)  self->GetObjID();
-   tolua_pushnumber(tolua_S,(lua_Number)tolua_ret);
+   tolua_pushinteger(tolua_S,(lua_Integer)tolua_ret);
   }
  }
  return 1;
@@ -2687,35 +2687,6 @@ static int tolua_interface_CObj_GetObjID00(lua_State* tolua_S)
  tolua_error(tolua_S,"#ferror in function 'GetObjID'.",&tolua_err);
  return 0;
 #endif
-}
-#endif //#ifndef TOLUA_DISABLE
-
-/* method: GetObjID of class  CObj */
-#ifndef TOLUA_DISABLE_tolua_interface_CObj_GetObjID01
-static int tolua_interface_CObj_GetObjID01(lua_State* tolua_S)
-{
- tolua_Error tolua_err;
- if (
-     !tolua_isusertype(tolua_S,1,"CObj",0,&tolua_err) ||
-     !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
-     !tolua_isnoobj(tolua_S,3,&tolua_err)
- )
-  goto tolua_lerror;
- else
- {
-  CObj* self = (CObj*)  tolua_tousertype(tolua_S,1,0);
-  uint64_t qwObjID = ((uint64_t)  tolua_tonumber(tolua_S,2,0));
-#ifndef TOLUA_RELEASE
-  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'GetObjID'", NULL);
-#endif
-  {
-   self->GetObjID(qwObjID);
-   tolua_pushnumber(tolua_S,(lua_Number)qwObjID);
-  }
- }
- return 1;
-tolua_lerror:
- return tolua_interface_CObj_GetObjID00(tolua_S);
 }
 #endif //#ifndef TOLUA_DISABLE
 
@@ -3205,14 +3176,14 @@ static int tolua_interface_FindRole00(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
  tolua_Error tolua_err;
  if (
-     !tolua_isnumber(tolua_S,1,0,&tolua_err) ||
+     !tolua_isinteger(tolua_S,1,0,&tolua_err) ||
      !tolua_isnoobj(tolua_S,2,&tolua_err)
  )
   goto tolua_lerror;
  else
 #endif
  {
-  uint64_t qwID = ((uint64_t)  tolua_tonumber(tolua_S,1,0));
+  uint64_t qwID = ((uint64_t)  tolua_tointeger(tolua_S,1,0));
   {
    CRole* tolua_ret = (CRole*)  FindRole(qwID);
     tolua_pushusertype(tolua_S,(void*)tolua_ret,"CRole");
@@ -3486,7 +3457,6 @@ TOLUA_API int tolua_interface_open (lua_State* tolua_S)
    tolua_function(tolua_S,"delete",tolua_interface_CObj_delete00);
    tolua_function(tolua_S,"SetObjID",tolua_interface_CObj_SetObjID00);
    tolua_function(tolua_S,"GetObjID",tolua_interface_CObj_GetObjID00);
-   tolua_function(tolua_S,"GetObjID",tolua_interface_CObj_GetObjID01);
    tolua_function(tolua_S,"SetName",tolua_interface_CObj_SetName00);
    tolua_function(tolua_S,"GetName",tolua_interface_CObj_GetName00);
   tolua_endmodule(tolua_S);

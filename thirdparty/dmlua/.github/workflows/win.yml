@@ -1,6 +1,6 @@
 name: win
 
-on: [push, delete, create]
+on: [workflow_dispatch]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
+        visual_studio: ["Visual Studio 16 2019", "Visual Studio 17 2022"]
 
     steps:
       - uses: actions/checkout@v2
