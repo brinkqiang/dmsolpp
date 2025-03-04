@@ -46,7 +46,7 @@
 #include <mach-o/dyld.h>
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #else
 #include <sys/time.h>
 #endif
@@ -91,7 +91,7 @@ inline void tolua_SafeSprintf(char(&des)[N], const char* format,
     des[sizeof(des) - 1] = '\0';
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 inline size_t tolua_StrNLen(const char* src, size_t max_len)
 {
     size_t i;
@@ -159,7 +159,7 @@ tolua_strtok_r(char* ptr, const char* sep, char** end)
     return NULL;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 struct __timezone
 {
@@ -218,7 +218,7 @@ static inline int gettimeofday(struct __timeval* tv, struct __timezone* tz)
 
 inline uint32_t GetTickCount32()
 {
-#ifdef WIN32
+#ifdef _WIN32
     struct __timeval tv = { 0 };
     gettimeofday(&tv, NULL);
     return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
@@ -1006,7 +1006,7 @@ private:
     static inline std::string __GetScriptPath()
     {
 
-#ifdef WIN32
+#ifdef _WIN32
         static char path[MAX_PATH];
         static bool first_time = true;
 

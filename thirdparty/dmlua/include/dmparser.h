@@ -22,7 +22,7 @@
 #ifndef __DMPARSER_H_INCLUDE__
 #define __DMPARSER_H_INCLUDE__
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,7 +71,7 @@ class CDirectoryParser
 public:
     CDirectoryParser()
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_fHandle = INVALID_HANDLE_VALUE;
 #else
         m_dir = NULL;
@@ -86,7 +86,7 @@ public:
 
     bool Open( const char* path )
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_szPath = path;
         m_szPath += "\\*";
         m_fHandle = INVALID_HANDLE_VALUE;
@@ -104,7 +104,7 @@ public:
     }
     void Close()
     {
-#ifdef WIN32
+#ifdef _WIN32
 
         if ( m_fHandle != INVALID_HANDLE_VALUE )
         {
@@ -125,7 +125,7 @@ public:
 
     bool Read( char* name, int buflen, SFileAttr* pAttr )
     {
-#ifdef WIN32
+#ifdef _WIN32
         WIN32_FIND_DATAA find_data;
 
         if ( m_fHandle == INVALID_HANDLE_VALUE )
@@ -199,7 +199,7 @@ public:
         return true;
     }
 private:
-#ifdef WIN32
+#ifdef _WIN32
     std::string m_szPath;
     HANDLE m_fHandle;
 #else

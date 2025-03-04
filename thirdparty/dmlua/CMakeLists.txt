@@ -1,19 +1,17 @@
 cmake_minimum_required(VERSION 3.8)
 
-PROJECT(dmlua)
+project(dmlua)
 
-LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-INCLUDE(cmake/ModuleImport.cmake)
-INCLUDE(cmake/ModuleCompileOptions.cmake)
-INCLUDE(cmake/LuaModule.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(cmake/ModuleImport.cmake)
+include(cmake/ModuleCompileOptions.cmake)
+include(cmake/LuaModule.cmake)
 ModuleSetCompileOptions()
 ModuleSetWinCompilerFlags()
 
-SET(LUA_MODULE lua54)
+set(LUA_MODULE lua54)
 
-ADD_DEFINITIONS(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
-  
-#SET (CMAKE_C_STANDARD 89)
+add_definitions(-DLUA_COMPAT_MODULE -DLUA_COMPAT_APIINTCASTS)
 
 ShowEnvironment()
 
@@ -22,9 +20,9 @@ LuaModuleImport("${LUA_MODULE}" "libtolua" "src/libtolua" "")
 ExeImport("tool" "${LUA_MODULE};libtolua")
 ExeImport("samples" "${LUA_MODULE};libtolua")
 
-IF (WIN32)
+if (WIN32)
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
     TARGET dmluademo
     PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${LUA_MODULE}> ${CMAKE_CURRENT_SOURCE_DIR}/samples/dmluademo/script
@@ -33,7 +31,7 @@ ADD_CUSTOM_COMMAND(
 
 )
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
     TARGET dmluademo
     PRE_BUILD
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/samples/dmluademo/script/toluapp.exe -t -n interface -o interface.cpp -H interface.h interface.pkg
@@ -41,7 +39,7 @@ ADD_CUSTOM_COMMAND(
     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/samples/dmluademo/script/interface.pkg
     )
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
     TARGET dmluademo
     PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -49,4 +47,4 @@ ADD_CUSTOM_COMMAND(
     $<TARGET_FILE_DIR:dmluademo>
 )
 
-ENDIF(WIN32)
+endif(WIN32)

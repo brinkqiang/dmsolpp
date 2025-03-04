@@ -9,7 +9,7 @@ typedef unsigned short UINT16;
 typedef int INT32;
 typedef unsigned int UINT32;
 
-#ifdef WIN32
+#ifdef _WIN32
 typedef long long int INT64;
 typedef unsigned long long int UINT64;
 #else
@@ -17,7 +17,7 @@ typedef long long int INT64;
 typedef unsigned long long int UINT64;
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #define FMT_I64 "%I64d"
 #define FMT_U64 "%I64u"
 #define FMT_64X "%I64x"

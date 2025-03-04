@@ -40,7 +40,7 @@ public:
     void SetHandlerHook( IDMConsoleSink* pSink )
     {
         m_pConsoleSink = pSink;
-#ifdef WIN32
+#ifdef _WIN32
 
         if ( 0 == SetConsoleCtrlHandler( ( PHANDLER_ROUTINE )
                                          &HDMConsoleMgr::OnConsoleEvent, true ) )
@@ -68,7 +68,7 @@ public:
         }
     }
 
-#ifdef WIN32
+#ifdef _WIN32
     static BOOL WINAPI OnConsoleEvent( UINT32 dwEventType )
     {
         switch ( dwEventType )
@@ -112,7 +112,7 @@ private:
 public:
     HDMConsoleMgr()
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_pConsoleSink = NULL;
         m_bOnce = true;
 #else

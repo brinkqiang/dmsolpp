@@ -51,7 +51,7 @@ class CDMThreadCtrl : public IDMThreadCtrl
 public:
     CDMThreadCtrl()
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_bIsStop       = true;
         m_bNeedWaitFor  = true;
         m_hThread       = INVALID_HANDLE_VALUE;
@@ -72,7 +72,7 @@ public:
 public:
     virtual void Resume( void )
     {
-#ifdef WIN32
+#ifdef _WIN32
         ResumeThread( m_hThread );
 #else
         DMASSERT( 0 );
@@ -81,7 +81,7 @@ public:
 
     virtual void Suspend()
     {
-#ifdef WIN32
+#ifdef _WIN32
         SuspendThread( m_hThread );
 #else
         DMASSERT( 0 );
@@ -90,7 +90,7 @@ public:
 
     virtual void Stop( void )
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_poThread->Terminate();
 #else
         m_poThread->Terminate();
@@ -99,7 +99,7 @@ public:
 
     virtual bool Kill( unsigned int dwExitCode )
     {
-#ifdef WIN32
+#ifdef _WIN32
 
         if ( INVALID_HANDLE_VALUE == m_hThread )
         {
@@ -122,7 +122,7 @@ public:
 
     virtual bool WaitFor( unsigned int dwWaitTime = INFINITE )
     {
-#ifdef WIN32
+#ifdef _WIN32
 
         if ( !m_bNeedWaitFor || INVALID_HANDLE_VALUE == m_hThread )
         {
@@ -161,7 +161,7 @@ public:
 
     virtual unsigned int GetThreadID( void )
     {
-#ifdef WIN32
+#ifdef _WIN32
         return m_dwThreadID;
 #else
         return ( unsigned int )m_ID;
@@ -173,13 +173,13 @@ public:
         return m_poThread;
     }
 
-#ifdef WIN32
+#ifdef _WIN32
     static unsigned int __stdcall StaticThreadFunc( void* arg )
 #else
     static void* StaticThreadFunc( void* arg )
 #endif
     {
-#ifdef WIN32
+#ifdef _WIN32
         CDMThreadCtrl* poCtrl = ( CDMThreadCtrl* )arg;
         poCtrl->m_bIsStop = false;
         poCtrl->m_poThread->ThrdProc();
@@ -214,7 +214,7 @@ public:
     bool Start( IDMThread* poThread, bool bNeedWaitFor = true,
                 bool bSuspend = false )
     {
-#ifdef WIN32
+#ifdef _WIN32
         m_bNeedWaitFor = bNeedWaitFor;
         m_poThread = poThread;
 
@@ -250,7 +250,7 @@ public:
     }
 
 protected:
-#ifdef WIN32
+#ifdef _WIN32
     volatile bool   m_bIsStop;
     bool            m_bNeedWaitFor;
     HANDLE          m_hThread;

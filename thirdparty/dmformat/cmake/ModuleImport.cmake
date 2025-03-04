@@ -50,6 +50,21 @@ macro(ModuleInclude ModuleName ModulePath)
 
 endmacro(ModuleInclude)
 
+macro(InterfaceImport ModuleName ModulePath DependsLib)
+    MESSAGE(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
+
+    set(${ModuleName}_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    mark_as_advanced(${ModuleName}_INCLUDE_DIR)
+    set(${ModuleName}_LIBRARIES ${ModuleName})
+    mark_as_advanced(${ModuleName}_LIBRARIES)
+    
+    add_library(${ModuleName} INTERFACE)
+
+    target_include_directories(${ModuleName} INTERFACE ${${ModuleName}_INCLUDE_DIR})
+
+    TARGET_LINK_LIBRARIES(${ModuleName} ${DependsLib})
+endmacro(InterfaceImport)
+
 macro(ModuleImport ModuleName ModulePath)
     MESSAGE(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
 
@@ -137,7 +152,7 @@ macro(LibImport ModuleName ModulePath)
             LIST(APPEND LIB_SOURCES)
         ENDIF(WIN32)
 
-        ADD_LIBRARY(${ModuleName} ${LIB_SOURCES})
+        ADD_LIBRARY(${ModuleName} STATIC ${LIB_SOURCES})
     ENDIF()
 endmacro(LibImport)
 
@@ -168,7 +183,7 @@ macro(LibImportExclude ModuleName ModulePath ExcludeList)
             LIST(APPEND LIB_SOURCES)
         ENDIF(WIN32)
 
-        ADD_LIBRARY(${ModuleName} ${LIB_SOURCES})
+        ADD_LIBRARY(${ModuleName} STATIC ${LIB_SOURCES})
     ENDIF()
 endmacro(LibImportExclude)
 
@@ -195,8 +210,8 @@ macro(DllImport ModuleName ModulePath)
         ENDIF(WIN32)
 
         IF (WIN32)
-            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}_module.def)
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}_module.def)
+            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
             ELSE()
                 ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
             ENDIF()
@@ -256,8 +271,8 @@ macro(DllImportDepends ModuleName ModulePath DependsLib)
         ENDIF(WIN32)
 
         IF (WIN32)
-            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}_module.def)
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}_module.def)
+            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
             ELSE()
                 ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
             ENDIF()
