@@ -18,7 +18,10 @@ ShowEnvironment()
 LuaModuleImport("${LUA_MODULE}" "libtolua" "src/libtolua" "")
 
 ExeImport("tool" "${LUA_MODULE};libtolua")
-ExeImport("samples" "${LUA_MODULE};libtolua")
+
+if (PROJECT_IS_TOP_LEVEL)
+    ExeImport("samples" "${LUA_MODULE};libtolua")
+endif()
 
 if (WIN32)
 
