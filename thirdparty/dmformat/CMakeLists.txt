@@ -7,7 +7,7 @@ INCLUDE(cmake/ModuleImport.cmake)
 INCLUDE(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
-InterfaceImport("dmformat" "include")
+InterfaceImport("dmformat" "include" "")
 
 if (PROJECT_IS_TOP_LEVEL)
     ExeImport("test" "dmformat")
