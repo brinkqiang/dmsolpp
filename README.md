@@ -23,7 +23,7 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 
 ## Doc
 
-- [deepwiki-dmsolpp](https://deepwiki.com/brinkqiang/dmsolpp
+- [deepwiki-dmsolpp](https://deepwiki.com/brinkqiang/dmsolpp)
 
 ## Intro
 dmsolpp
