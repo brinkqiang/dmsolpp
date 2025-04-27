@@ -21,6 +21,10 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 [win-badge]: https://github.com/brinkqiang/dmsolpp/workflows/win/badge.svg "win build status"
 [win-link]:  https://github.com/brinkqiang/dmsolpp/actions/workflows/win.yml "win build status"
 
+## Doc
+
+- [deepwiki-dmsolpp](https://deepwiki.com/brinkqiang/dmsolpp
+
 ## Intro
 dmsolpp
 
