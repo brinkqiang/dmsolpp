@@ -253,12 +253,12 @@ struct EventData {
 class ILuaEventFilterRunner {
 public:
     virtual ~ILuaEventFilterRunner() = default;
-    virtual bool runFilter(sol::state_view lua_State, const sol::table& event_data, const std::string& lua_function_name) const = 0;
+    virtual bool runFilter(sol::state_view lua_State, const std::string& lua_function_name) const = 0;
 };
 
 class LuaScriptEventFilterRunner : public ILuaEventFilterRunner {
 public:
-    bool runFilter(sol::state_view lua_State, const sol::table& event_data, const std::string& lua_function_name) const override {
+    bool runFilter(sol::state_view lua_State, const std::string& lua_function_name) const override {
         sol::protected_function lua_filter_func = lua_State[lua_function_name];
 
         if (!lua_filter_func.valid()) {
@@ -266,7 +266,7 @@ public:
             return false;
         }
 
-        sol::protected_function_result result = lua_filter_func(event_data);
+        sol::protected_function_result result = lua_filter_func();
 
         if (result.valid()) {
             if (result.get_type() == sol::type::boolean) {
@@ -305,13 +305,10 @@ TEST(EventData, event)
     state["count"] = 0;
 
     EventData event_data = {"”–∫¶≥Ã–Ú", 3, "Contains DNs and ∂Ò“‚≈¿≥Ê with π§æﬂ…®√Ë", "500"};
-
-    sol::table event_table = state.create_table_with(
-        "category", event_data.category,
-        "severity", event_data.severity,
-        "eventName", event_data.eventName,
-        "resultCode", event_data.resultCode
-    );
+    state["category"] = event_data.category;
+    state["severity"] = event_data.severity;
+    state["eventName"] = event_data.eventName;
+    state["resultCode"] = event_data.resultCode;
 
     oDMLuaEngine.DoString(R"(
     -- event_filter.lua
@@ -334,17 +331,7 @@ TEST(EventData, event)
         return string.find(text, pattern, 1, true) ~= nil
     end
 
-    function evaluate_event(event)
-        if type(event) ~= "table" then
-            -- print("Error: event data is not a table")
-            return false
-        end
-
-        local category = event.category
-        local severity = event.severity
-        local eventName = event.eventName
-        local resultCode = event.resultCode
-
+    function evaluate_event()
         local categoryMatch = (category == "”–∫¶≥Ã–Ú" or category == "Õ¯¬Áπ•ª˜" or category == "–≈œ¢∆∆ªµ")
         local severityMatch = (severity == 2 or severity == 3 or severity == 4)
 
@@ -380,7 +367,7 @@ TEST(EventData, event)
 
     for (int i=0; i < 100 * 10000; i++)
     {
-        bool result1 = runner.runFilter(oDMLuaEngine.GetSol(), event_table, "evaluate_event");
+        bool result1 = runner.runFilter(oDMLuaEngine.GetSol(), "evaluate_event");
     }
     int count = state["count"];
 
