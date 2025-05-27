@@ -253,12 +253,12 @@ struct EventData {
 class ILuaEventFilterRunner {
 public:
     virtual ~ILuaEventFilterRunner() = default;
-    virtual bool runFilter(sol::state_view lua_State, const EventData& event_data, const std::string& lua_function_name) const = 0;
+    virtual bool runFilter(sol::state_view lua_State, const sol::table& event_data, const std::string& lua_function_name) const = 0;
 };
 
 class LuaScriptEventFilterRunner : public ILuaEventFilterRunner {
 public:
-    bool runFilter(sol::state_view lua_State, const EventData& event_data, const std::string& lua_function_name) const override {
+    bool runFilter(sol::state_view lua_State, const sol::table& event_data, const std::string& lua_function_name) const override {
         sol::protected_function lua_filter_func = lua_State[lua_function_name];
 
         if (!lua_filter_func.valid()) {
@@ -266,14 +266,7 @@ public:
             return false;
         }
 
-        sol::table event_table = lua_State.create_table_with(
-            "category", event_data.category,
-            "severity", event_data.severity,
-            "eventName", event_data.eventName,
-            "resultCode", event_data.resultCode
-        );
-
-        sol::protected_function_result result = lua_filter_func(event_table);
+        sol::protected_function_result result = lua_filter_func(event_data);
 
         if (result.valid()) {
             if (result.get_type() == sol::type::boolean) {
@@ -310,6 +303,15 @@ TEST(EventData, event)
     }
     auto state = oDMLuaEngine.GetSol();
     state["count"] = 0;
+
+    EventData event_data = {"有害程序", 3, "Contains DNs and 恶意爬虫 with 工具扫描", "500"};
+
+    sol::table event_table = state.create_table_with(
+        "category", event_data.category,
+        "severity", event_data.severity,
+        "eventName", event_data.eventName,
+        "resultCode", event_data.resultCode
+    );
 
     oDMLuaEngine.DoString(R"(
     -- event_filter.lua
@@ -375,12 +377,10 @@ TEST(EventData, event)
 
     LuaScriptEventFilterRunner runner;
 
-    // 示例事件1 (预期通过 Part1)
-    EventData event1 = {"有害程序", 3, "Contains DNs and 恶意爬虫 with 工具扫描", "500"};
 
     for (int i=0; i < 100 * 10000; i++)
     {
-        bool result1 = runner.runFilter(oDMLuaEngine.GetSol(), event1, "evaluate_event");
+        bool result1 = runner.runFilter(oDMLuaEngine.GetSol(), event_table, "evaluate_event");
     }
     int count = state["count"];
 
