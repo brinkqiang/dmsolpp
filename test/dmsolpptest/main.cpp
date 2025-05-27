@@ -240,3 +240,149 @@ TEST(dmluatest_sol_perf, dmluatest_sol_perf)
     fmt::print("total = {}\n", total);
 
 }
+
+#include <string>
+
+struct EventData {
+    std::string category;
+    int severity;
+    std::string eventName;
+    std::string resultCode;
+};
+
+class ILuaEventFilterRunner {
+public:
+    virtual ~ILuaEventFilterRunner() = default;
+    virtual bool runFilter(sol::state_view lua_State, const EventData& event_data, const std::string& lua_function_name) const = 0;
+};
+
+class LuaScriptEventFilterRunner : public ILuaEventFilterRunner {
+public:
+    bool runFilter(sol::state_view lua_State, const EventData& event_data, const std::string& lua_function_name) const override {
+        sol::protected_function lua_filter_func = lua_State[lua_function_name];
+
+        if (!lua_filter_func.valid()) {
+            std::cerr << "Error: Lua function '" << lua_function_name << "' not found." << std::endl;
+            return false;
+        }
+
+        sol::table event_table = lua_State.create_table_with(
+            "category", event_data.category,
+            "severity", event_data.severity,
+            "eventName", event_data.eventName,
+            "resultCode", event_data.resultCode
+        );
+
+        sol::protected_function_result result = lua_filter_func(event_table);
+
+        if (result.valid()) {
+            if (result.get_type() == sol::type::boolean) {
+                return result.get<bool>();
+            }
+            else {
+                std::cerr << "Error: Lua function '" << lua_function_name << "' did not return a boolean." << std::endl;
+                return false;
+            }
+        }
+        else {
+            sol::error err = result;
+            std::cerr << "Error executing Lua function '" << lua_function_name << "': " << err.what() << std::endl;
+            return false;
+        }
+    }
+};
+
+TEST(EventData, event)
+{
+    // 使用接口的方式提供所有功能。
+    auto module = dmsolppGetModule();
+    if (nullptr == module)
+    {
+        return;
+    }
+
+    CDMLuaEngine& oDMLuaEngine = *module->GetDMLuaEngine();
+
+    if (!oDMLuaEngine.ReloadScript())
+    {
+        ASSERT_TRUE(0);
+        return;
+    }
+    auto state = oDMLuaEngine.GetSol();
+    state["count"] = 0;
+
+    oDMLuaEngine.DoString(R"(
+    -- event_filter.lua
+
+    local function string_contains_ci(text, pattern)
+        if type(text) ~= "string" or type(pattern) ~= "string" then
+            return false
+        end
+        if pattern == "" then return true end
+        if text == "" and pattern ~= "" then return false end
+        return string.find(string.lower(text), string.lower(pattern), 1, true) ~= nil
+    end
+
+    local function string_contains_cs(text, pattern)
+        if type(text) ~= "string" or type(pattern) ~= "string" then
+            return false
+        end
+        if pattern == "" then return true end
+        if text == "" and pattern ~= "" then return false end
+        return string.find(text, pattern, 1, true) ~= nil
+    end
+
+    function evaluate_event(event)
+        if type(event) ~= "table" then
+            -- print("Error: event data is not a table")
+            return false
+        end
+
+        local category = event.category
+        local severity = event.severity
+        local eventName = event.eventName
+        local resultCode = event.resultCode
+
+        local categoryMatch = (category == "有害程序" or category == "网络攻击" or category == "信息破坏")
+        local severityMatch = (severity == 2 or severity == 3 or severity == 4)
+
+        local eventNameCond1 = not string_contains_cs(eventName, "畸形漏洞")
+        local eventNameCond2 = string_contains_ci(eventName, "DNs")
+        local eventNameCond3 = string_contains_ci(eventName, "恶意爬虫")
+        local eventNameCond4 = string_contains_ci(eventName, "工具扫描")
+        local eventNameCond5 = not string_contains_cs(eventName, "扫描工具")
+        local eventNameCond6 = (eventName ~= "服务器敏感目录访问")
+        local eventNameCond7 = (eventName ~= "Dos攻击日志")
+        local eventNameCond8 = (eventName ~= "SNMP使用默认的社区串")
+
+        local part1ConditionsMet = categoryMatch and
+                                  severityMatch and
+                                  eventNameCond1 and
+                                  eventNameCond2 and
+                                  eventNameCond3 and
+                                  eventNameCond4 and
+                                  eventNameCond5 and
+                                  eventNameCond6 and
+                                  eventNameCond7 and
+                                  eventNameCond8
+    
+        local part2ConditionsMet = (eventName == "服务器敏感目录访问" and resultCode ~= "200")
+
+        count = count + 1
+        return part1ConditionsMet or part2ConditionsMet
+    end
+        )");
+
+    LuaScriptEventFilterRunner runner;
+
+    // 示例事件1 (预期通过 Part1)
+    EventData event1 = {"有害程序", 3, "Contains DNs and 恶意爬虫 with 工具扫描", "500"};
+
+    for (int i=0; i < 100 * 10000; i++)
+    {
+        bool result1 = runner.runFilter(oDMLuaEngine.GetSol(), event1, "evaluate_event");
+    }
+    int count = state["count"];
+
+    std::cout << count << std::endl;
+}
