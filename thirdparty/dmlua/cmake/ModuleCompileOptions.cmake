@@ -30,68 +30,88 @@ macro(ShowEnvironment)
   message(STATUS "================================================================================")
 endmacro(ShowEnvironment)
 
+function(print_package_vars PREFIX)
+    get_cmake_property(_vars VARIABLES)
+    foreach(_var IN LISTS _vars)
+        if(_var MATCHES "^${PREFIX}")
+            message(STATUS "package ${PREFIX} -> ${_var} = ${${_var}}")
+        endif()
+    endforeach()
+endfunction()
+
 macro(ModuleSetCompileOptions)
-  CMAKE_POLICY(SET CMP0022 NEW)
-  INCLUDE(CheckCXXCompilerFlag)
-  IF(POLICY CMP0048)
-    CMAKE_POLICY(SET CMP0048 NEW)
-  ENDIF()
+  cmake_policy(SET CMP0022 NEW)
+  include(CheckCXXCompilerFlag)
+  if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+  endif()
+
+
+  set(CMAKE_C_STANDARD 99)
+
+  set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
   
-  SET (CMAKE_C_STANDARD 99)
+  if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path;@loader_path/../lib")  # macOS
+  elseif(UNIX)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../lib")  # Linux
+  endif()
   
-  IF ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    SET(CMAKE_BUILD_TYPE "debug")
-  ENDIF()
+  if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    set(CMAKE_BUILD_TYPE "debug")
+  endif()
 
-  IF (WIN32)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src/windows)
-  ENDIF(WIN32)
+  if (WIN32)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/windows)
+  endif()
 
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/)
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/test)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
-  IF (WIN32)
-      LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/bin)
-      SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-      SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-  ELSE(WIN32)
-      LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-      SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-      SET(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-  ENDIF(WIN32)
+  if (WIN32 AND NOT MINGW)
+      link_directories(${CMAKE_SOURCE_DIR}/bin)
+      set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+      set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+  else()
+      link_directories(${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+      set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+      set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+  endif()
 
-  IF (WIN32)
-    MESSAGE(STATUS "Now is windows")
+  if (WIN32)
+    message(STATUS "Now is windows")
 
-    SET(DMOS_NAME "win")
+    set(DMOS_NAME "win")
 
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
-    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-    SET(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL}")
-    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+    set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL}")
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
 
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
-    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+      
+    link_libraries(Ws2_32)
+    if(MSVC)
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
+      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
+      set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
 
-    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
-    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
-    SET(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
-    LINK_LIBRARIES(Ws2_32)
-    IF(MSVC)
-      ADD_DEFINITIONS(/bigobj)
-      ADD_DEFINITIONS(/DNOMINMAX /DWIN32_LEAN_AND_MEAN=1 /D_CRT_SECURE_NO_WARNINGS /D_SCL_SECURE_NO_WARNINGS)
+      add_definitions(/bigobj)
+      add_definitions(/DNOMINMAX /DWIN32_LEAN_AND_MEAN=1 /D_CRT_SECURE_NO_WARNINGS /D_SCL_SECURE_NO_WARNINGS /D_WINSOCK_DEPRECATED_NO_WARNINGS)
+      add_definitions(/utf-8)
+      add_compile_options(/W3 /wd4005 /wd4068 /wd4244 /wd4267 /wd4800 /wd4996)
 
-      ADD_COMPILE_OPTIONS(/W3 /wd4005 /wd4068 /wd4244 /wd4267 /wd4800)
-
-      CHECK_CXX_COMPILER_FLAG("/std:c++17" COMPILER_SUPPORTS_CXX17)
-      CHECK_CXX_COMPILER_FLAG("/std:c++14" COMPILER_SUPPORTS_CXX14)
-      CHECK_CXX_COMPILER_FLAG("/std:c++11" COMPILER_SUPPORTS_CXX11)
+      check_cxx_compiler_flag("/std:c++17" COMPILER_SUPPORTS_CXX17)
+      check_cxx_compiler_flag("/std:c++14" COMPILER_SUPPORTS_CXX14)
+      check_cxx_compiler_flag("/std:c++11" COMPILER_SUPPORTS_CXX11)
       
       if(COMPILER_SUPPORTS_CXX17)
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
@@ -105,15 +125,15 @@ macro(ModuleSetCompileOptions)
       else()
           message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or newer support. Please use a different C++ compiler.")
       endif()
-    ENDIF()
-  ELSEIF (APPLE)
-    MESSAGE(STATUS "Now is Apple systems")
+    endif()
+  elseif (APPLE)
+    message(STATUS "Now is Apple OS")
 
-    SET(DMOS_NAME "mac") 
+    set(DMOS_NAME "mac") 
 
-    CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+    check_cxx_compiler_flag("-std=c++17" COMPILER_SUPPORTS_CXX17)
+    check_cxx_compiler_flag("-std=c++14" COMPILER_SUPPORTS_CXX14)
+    check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
     if(COMPILER_SUPPORTS_CXX17)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
@@ -128,41 +148,41 @@ macro(ModuleSetCompileOptions)
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
     endif(COMPILER_SUPPORTS_CXX17)
 
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D_DEBUG")
-    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g")
-    SET(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -g")
-    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -g")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D_DEBUG")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g")
+    set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -g")
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -g")
 
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D_DEBUG")
-    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
-    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -g")
-    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -g")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D_DEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -g")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -g")
 
-    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" )
-    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
-    SET(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" )
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
 
     set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
     find_package(Threads REQUIRED)
 
-    SET(CMAKE_THREAD_LINK "")
-    if(Threads_FOUND)
-      SET(CMAKE_THREAD_LINK "Threads::Threads")
-    endif(Threads_FOUND)
+    set(CMAKE_THREAD_LINK "")
+    if(THREADS_FOUND)
+      set(CMAKE_THREAD_LINK "Threads::Threads")
+    endif()
 
-    LINK_LIBRARIES(${CMAKE_THREAD_LINK})
-  ELSEIF (UNIX)
-    MESSAGE(STATUS "Now is UNIX-like OS")
+    link_libraries(${CMAKE_THREAD_LINK})
+  elseif (UNIX)
+    message(STATUS "Now is UNIX-like OS")
 
-    SET(DMOS_NAME "lin")
+    set(DMOS_NAME "lin")
 
-    CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+    check_cxx_compiler_flag("-std=c++17" COMPILER_SUPPORTS_CXX17)
+    check_cxx_compiler_flag("-std=c++14" COMPILER_SUPPORTS_CXX14)
+    check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
     
     if(COMPILER_SUPPORTS_CXX17)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
@@ -177,81 +197,84 @@ macro(ModuleSetCompileOptions)
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 or newer support. Please use a different C++ compiler.")
     endif()
 
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wl,--rpath=./ -Wl,-rpath-link=./lib")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D_DEBUG")
-    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g")
-    SET(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -g")
-    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -g")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wl,--rpath=./ -Wl,-rpath-link=./lib")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D_DEBUG")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g")
+    set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -g")
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -g")
 
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wl,--rpath=./ -Wl,-rpath-link=./lib")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D_DEBUG")
-    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
-    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -g")
-    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -g")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wl,--rpath=./ -Wl,-rpath-link=./lib")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D_DEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} -g")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -g")
 
-    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
-    SET(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
 
     set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
     find_package(Threads REQUIRED)
 
-    SET(CMAKE_THREAD_LINK "")
-    if(Threads_FOUND)
-      SET(CMAKE_THREAD_LINK "Threads::Threads")
-    endif(Threads_FOUND)
+    set(CMAKE_THREAD_LINK "")
+    if(THREADS_FOUND)
+      set(CMAKE_THREAD_LINK "Threads::Threads")
+    endif()
 
-    LINK_LIBRARIES(m ${CMAKE_THREAD_LINK})
-    FIND_PROGRAM(CCACHE_FOUND ccache)
-    IF(CCACHE_FOUND)
-      SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-      SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    ENDIF(CCACHE_FOUND)
-  ENDIF ()
+    link_libraries(m ${CMAKE_THREAD_LINK})
+    find_program(CCACHE_FOUND ccache)
+    if(CCACHE_FOUND)
+      set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+      set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    endif()
+  endif ()
 endmacro(ModuleSetCompileOptions)
 
 macro(ModuleSetWinCompilerFlags)
-  IF (WIN32)
-    set(CompilerFlags
-            CMAKE_CXX_FLAGS
-            CMAKE_CXX_FLAGS_DEBUG
-            CMAKE_CXX_FLAGS_RELEASE
-            CMAKE_CXX_FLAGS_RELWITHDEBINFO
-            CMAKE_CXX_FLAGS_MINSIZEREL
-            CMAKE_C_FLAGS
-            CMAKE_C_FLAGS_DEBUG
-            CMAKE_C_FLAGS_RELEASE
-            CMAKE_C_FLAGS_RELWITHDEBINFO
-            CMAKE_C_FLAGS_MINSIZEREL
-            )
-    foreach(CompilerFlag ${CompilerFlags})
-      string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-    endforeach()
-  ENDIF (WIN32)
-endmacro(ModuleSetWinCompilerFlags)
+  if (WIN32)
+    if(POLICY CMP0091)
+        cmake_policy(SET CMP0091 NEW)
+    endif()
+  
+    if (MSVC)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif()
+  endif (WIN32)
+endmacro()
 
-MACRO(AddInstall ModuleList)
+
+macro(AddInstall ModuleList HeadersDir)
     message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
     message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
+    message(STATUS "HeadersDir: ${HeadersDir}")
     message(STATUS "Install Path: ${CMAKE_INSTALL_PREFIX}/bin")
 
-    Message(STATUS "AddInstall ${ModuleList} ...")
-    IF (WIN32)
-        INSTALL(TARGETS ${ModuleList}
+    message(STATUS "AddInstall ${ModuleList} ...")
+    if (WIN32)
+        install(TARGETS ${ModuleList}
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
-    ELSE(WIN32)
-        INCLUDE(GNUInstallDirs)
-        INSTALL(TARGETS ${ModuleList}
+    else(WIN32)
+        include(GNUInstallDirs)
+        install(TARGETS ${ModuleList}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    ENDIF(WIN32)
+    endif(WIN32)
 
-    CONFIGURE_FILE(
+    if (EXISTS "${HeadersDir}" AND NOT "${HeadersDir}" STREQUAL "")
+        message(STATUS "Installing headers from: ${HeadersDir}")
+        install(DIRECTORY "${HeadersDir}/"
+                DESTINATION include
+                FILES_MATCHING 
+                PATTERN "*.h"
+                PATTERN "*.hpp")
+    endif()
+
+    configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
             IMMEDIATE @ONLY)
-    ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-ENDMACRO(AddInstall)
+    add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endmacro()

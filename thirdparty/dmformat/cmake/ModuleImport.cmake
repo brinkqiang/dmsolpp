@@ -1,57 +1,57 @@
 
 macro(SUBDIRLIST result curdir)
-    FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
-    SET(dirlist "")
-    FOREACH(child ${children})
-        IF(IS_DIRECTORY ${curdir}/${child})
-            LIST(APPEND dirlist ${child})
-        ENDIF()
-    ENDFOREACH()
-    SET(${result} ${dirlist})
+    file(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    set(dirlist "")
+    foreach(child ${children})
+        if(IS_DIRECTORY ${curdir}/${child})
+            list(APPEND dirlist ${child})
+        endif()
+    endforeach()
+    set(${result} ${dirlist})
 endmacro()
 
 macro(ModuleInclude ModuleName ModulePath)
-    MESSAGE(STATUS "ModuleInclude ${ModuleName} ${ModulePath}")
+    message(STATUS "ModuleInclude ${ModuleName} ${ModulePath}")
 
-    IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/CMakeLists.txt)
-        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
+    if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/CMakeLists.txt)
+        if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
             SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
-            FOREACH(subdir ${SUBDIRS})
+            foreach(subdir ${SUBDIRS})
                 ModuleInclude(${subdir} ${ModulePath}/thirdparty/${subdir})
-            ENDFOREACH()
-        ENDIF()
+            endforeach()
+        endif()
 
-    ELSEIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/CMakeLists.txt)
-        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
+    elseif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/CMakeLists.txt)
+        if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
             SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
-            FOREACH(subdir ${SUBDIRS})
+            foreach(subdir ${SUBDIRS})
                 ModuleInclude(${subdir} ${ModulePath}/thirdparty/${subdir})
-            ENDFOREACH()
-        ENDIF()
-    ELSE()
+            endforeach()
+        endif()
+    else()
 
-    ENDIF()
+    endif()
 
-    IF (WIN32)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/windows)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/${ModuleName}/windows)
-        LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/lib)
-    ENDIF(WIN32)
+    if (WIN32)
+        include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/windows)
+        include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/${ModuleName}/windows)
+        link_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/lib)
+    endif(WIN32)
 
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/${ModuleName})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/${ModuleName})
 
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include/${ModuleName})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include/${ModuleName})
 
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/test)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/test/${ModuleName})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/test)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/test/${ModuleName})
 
-endmacro(ModuleInclude)
+endmacro()
 
 macro(InterfaceImport ModuleName ModulePath DependsLib)
-    MESSAGE(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
+    message(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
 
     set(${ModuleName}_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
     mark_as_advanced(${ModuleName}_INCLUDE_DIR)
@@ -62,80 +62,112 @@ macro(InterfaceImport ModuleName ModulePath DependsLib)
 
     target_include_directories(${ModuleName} INTERFACE ${${ModuleName}_INCLUDE_DIR})
 
-    TARGET_LINK_LIBRARIES(${ModuleName} ${DependsLib})
-endmacro(InterfaceImport)
+    target_link_libraries(${ModuleName} ${DependsLib})
+endmacro()
 
 macro(ModuleImport ModuleName ModulePath)
-    MESSAGE(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
+    message(STATUS "ModuleImport ${ModuleName} ${ModulePath}")
 
-    GET_PROPERTY(DMLIBS GLOBAL PROPERTY DMLIBS)
+    get_property(DMLIBS GLOBAL PROPERTY DMLIBS)
 
-    LIST(FIND DMLIBS ${ModuleName} DMLIBS_FOUND)
+    list(FIND DMLIBS ${ModuleName} DMLIBS_FOUND)
     IF (DMLIBS_FOUND STREQUAL "-1")
-        LIST(APPEND DMLIBS ${ModuleName})
-        SET_PROPERTY(GLOBAL PROPERTY DMLIBS ${DMLIBS})
+        list(APPEND DMLIBS ${ModuleName})
+        set_property(GLOBAL PROPERTY DMLIBS ${DMLIBS})
 
-        MESSAGE(STATUS "LIST APPEND ${ModuleName} ${DMLIBS}" )
+        message(STATUS "LIST APPEND ${ModuleName} ${DMLIBS}" )
 
-        IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/CMakeLists.txt)
-            ADD_SUBDIRECTORY(${ModulePath})
-        ELSEIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/CMakeLists.txt)
-            ADD_SUBDIRECTORY(${ModulePath}/cmake)
-        ELSE()
-            MESSAGE(FATAL_ERROR "ModuleImport ${ModuleName} CMakeLists.txt not exist.")
-        ENDIF()
+        if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/CMakeLists.txt)
+            add_subdirectory(${ModulePath})
+        elseif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/CMakeLists.txt)
+            add_subdirectory(${ModulePath}/cmake)
+        else()
+            message(FATAL_ERROR "ModuleImport ${ModuleName} CMakeLists.txt not exist.")
+        endif()
 
-        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
+        if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
             SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
-            FOREACH(subdir ${SUBDIRS})
+            foreach(subdir ${SUBDIRS})
                 ModuleInclude(${subdir} ${ModulePath}/thirdparty/${subdir})
-            ENDFOREACH()
-        ENDIF()
+            endforeach()
+        endif()
 
         ModuleInclude(${ModuleName} ${ModulePath})
-    ELSE()
-        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
+    else()
+        if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
             SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
-            FOREACH(subdir ${SUBDIRS})
+            foreach(subdir ${SUBDIRS})
                 ModuleInclude(${subdir} ${ModulePath}/thirdparty/${subdir})
-            ENDFOREACH()
-        ENDIF()
+            endforeach()
+        endif()
         ModuleInclude(${ModuleName} ${ModulePath})
-        MESSAGE(STATUS "LIST REPEAT ${ModuleName} ${DMLIBS}" )
-    ENDIF()
-endmacro(ModuleImport)
+        message(STATUS "LIST REPEAT ${ModuleName} ${DMLIBS}" )
+    endif()
+endmacro()
 
 macro(ExeImport ModulePath DependsLib)
-    MESSAGE(STATUS "ExeImport ${ModulePath} ${DependsLib}")
+    message(STATUS "ExeImport ${ModulePath} ${DependsLib}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
-        FOREACH(subdir ${SUBDIRS})
-            MESSAGE(STATUS "INCLUDE -> ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}")
-            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir})
-            FILE(GLOB_RECURSE BIN_SOURCES
+        foreach(subdir ${SUBDIRS})
+            message(STATUS "INCLUDE -> ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}")
+            include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir})
+            file(GLOB_RECURSE BIN_SOURCES
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cc
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.c
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.hpp
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.h)
 
-            LIST(FILTER BIN_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/tpl/*")
+            list(FILTER BIN_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/tpl/*")
 
-            MESSAGE(STATUS "BIN_SOURCES ${LIB_SOURCES}")
+            foreach(child ${BIN_SOURCES})
+                message(STATUS "SOURCES -> ${child}")
+            endforeach()
+            
+            add_executable(${subdir} ${BIN_SOURCES})
+            target_link_libraries(${subdir} ${DependsLib})
+        endforeach()
+    endif()
 
-            ADD_EXECUTABLE(${subdir} ${BIN_SOURCES})
-            TARGET_LINK_LIBRARIES(${subdir} ${DependsLib})
-        ENDFOREACH()
-    ENDIF()
+endmacro()
 
-endmacro(ExeImport)
+macro(ExeImportAndTest ModulePath DependsLib)
+    message(STATUS "ExeImport ${ModulePath} ${DependsLib}")
+
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        foreach(subdir ${SUBDIRS})
+            message(STATUS "INCLUDE -> ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}")
+            include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir})
+            file(GLOB_RECURSE BIN_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cc
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.h)
+
+            list(FILTER BIN_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/tpl/*")
+
+            foreach(child ${BIN_SOURCES})
+                message(STATUS "SOURCES -> ${child}")
+            endforeach()
+            
+            add_executable(${subdir} ${BIN_SOURCES})
+            target_link_libraries(${subdir} ${DependsLib})
+
+            add_test(NAME ${subdir} COMMAND $<TARGET_FILE:${subdir}> WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
+        endforeach()
+    endif()
+
+endmacro()
 
 macro(LibImport ModuleName ModulePath)
-    MESSAGE(STATUS "LibImport ${ModuleName} ${ModulePath}")
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    message(STATUS "LibImport ${ModuleName} ${ModulePath}")
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         ModuleInclude(${ModuleName} ${ModulePath})
-        FILE(GLOB_RECURSE LIB_SOURCES
+        file(GLOB_RECURSE LIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
@@ -146,21 +178,21 @@ macro(LibImport ModuleName ModulePath)
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
         )
 
-        LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
+        list(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
 
-        IF (WIN32)
-            LIST(APPEND LIB_SOURCES)
-        ENDIF(WIN32)
+        if (WIN32)
+            list(APPEND LIB_SOURCES)
+        endif(WIN32)
 
-        ADD_LIBRARY(${ModuleName} STATIC ${LIB_SOURCES})
-    ENDIF()
-endmacro(LibImport)
+        add_library(${ModuleName} STATIC ${LIB_SOURCES})
+    endif()
+endmacro()
 
 macro(LibImportExclude ModuleName ModulePath ExcludeList)
-    MESSAGE(STATUS "LibImport ${ModuleName} ${ModulePath}")
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    message(STATUS "LibImport ${ModuleName} ${ModulePath}")
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         ModuleInclude(${ModuleName} ${ModulePath})
-        FILE(GLOB_RECURSE LIB_SOURCES
+        file(GLOB_RECURSE LIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
@@ -171,28 +203,28 @@ macro(LibImportExclude ModuleName ModulePath ExcludeList)
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
         )
 
-        LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
+        list(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
 
 
-        FOREACH(child ${ExcludeList})
-            LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${child}")
-            MESSAGE(STATUS "ExcludeList has ${child}" )
-        ENDFOREACH()
+        foreach(child ${ExcludeList})
+            list(FILTER LIB_SOURCES EXCLUDE REGEX "${child}")
+            message(STATUS "ExcludeList has ${child}" )
+        endforeach()
 
-        IF (WIN32)
-            LIST(APPEND LIB_SOURCES)
-        ENDIF(WIN32)
+        if (WIN32)
+            list(APPEND LIB_SOURCES)
+        endif(WIN32)
 
-        ADD_LIBRARY(${ModuleName} STATIC ${LIB_SOURCES})
-    ENDIF()
-endmacro(LibImportExclude)
+        add_library(${ModuleName} STATIC ${LIB_SOURCES})
+    endif()
+endmacro()
 
 macro(DllImport ModuleName ModulePath)
-    MESSAGE(STATUS "DllImport ${ModuleName} ${ModulePath}")
+    message(STATUS "DllImport ${ModuleName} ${ModulePath}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         ModuleInclude(${ModuleName} ${ModulePath})
-        FILE(GLOB_RECURSE LIB_SOURCES
+        file(GLOB_RECURSE LIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
@@ -203,30 +235,30 @@ macro(DllImport ModuleName ModulePath)
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
         )
 
-        LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
+        list(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
 
-        IF (WIN32)
-            LIST(APPEND LIB_SOURCES)
-        ENDIF(WIN32)
+        if (WIN32)
+            list(APPEND LIB_SOURCES)
+        endif(WIN32)
 
-        IF (WIN32)
-            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
-            ELSE()
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
-            ENDIF()
-        ELSE(WIN32)
-            ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
-        ENDIF(WIN32)
-    ENDIF()
-endmacro(DllImport)
+        if (WIN32)
+            if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+                add_library(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+            else()
+                add_library(${ModuleName} SHARED ${LIB_SOURCES})
+            endif()
+        else(WIN32)
+            add_library(${ModuleName} SHARED ${LIB_SOURCES})
+        endif(WIN32)
+    endif()
+endmacro()
 
 macro(LibImportDepends ModuleName ModulePath DependsLib)
-    MESSAGE(STATUS "LibImportDepends ${ModuleName} ${ModulePath} ${DependsLib}")
+    message(STATUS "LibImportDepends ${ModuleName} ${ModulePath} ${DependsLib}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         ModuleInclude(${ModuleName} ${ModulePath})
-        FILE(GLOB_RECURSE LIB_SOURCES
+        file(GLOB_RECURSE LIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
@@ -237,23 +269,23 @@ macro(LibImportDepends ModuleName ModulePath DependsLib)
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
         )
 
-        LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
+        list(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
 
-        IF (WIN32)
-            LIST(APPEND LIB_SOURCES)
-        ENDIF(WIN32)
+        if (WIN32)
+            list(APPEND LIB_SOURCES)
+        endif(WIN32)
 
-        ADD_LIBRARY(${ModuleName} STATIC ${LIB_SOURCES})
-        TARGET_LINK_LIBRARIES(${ModuleName} ${DependsLib})
-    ENDIF()
-endmacro(LibImportDepends)
+        add_library(${ModuleName} STATIC ${LIB_SOURCES})
+        target_link_libraries(${ModuleName} ${DependsLib})
+    endif()
+endmacro()
 
 macro(DllImportDepends ModuleName ModulePath DependsLib)
-    MESSAGE(STATUS "DllImportDepends ${ModuleName} ${ModulePath} ${DependsLib}")
+    message(STATUS "DllImportDepends ${ModuleName} ${ModulePath} ${DependsLib}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         ModuleInclude(${ModuleName} ${ModulePath})
-        FILE(GLOB_RECURSE LIB_SOURCES
+        file(GLOB_RECURSE LIB_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
@@ -264,116 +296,116 @@ macro(DllImportDepends ModuleName ModulePath DependsLib)
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
         )
 
-        LIST(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
+        list(FILTER LIB_SOURCES EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/tpl/*")
 
-        IF (WIN32)
-            LIST(APPEND LIB_SOURCES)
-        ENDIF(WIN32)
+        if (WIN32)
+            list(APPEND LIB_SOURCES)
+        endif(WIN32)
 
-        IF (WIN32)
-            IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
-            ELSE()
-                ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
-            ENDIF()
-        ELSE(WIN32)
-            ADD_LIBRARY(${ModuleName} SHARED ${LIB_SOURCES})
-        ENDIF(WIN32)
-        TARGET_LINK_LIBRARIES(${ModuleName} ${DependsLib})
-    ENDIF()
-endmacro(DllImportDepends)
+        if (WIN32)
+            if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+                add_library(${ModuleName} SHARED ${LIB_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${ModuleName}.def)
+            else()
+                add_library(${ModuleName} SHARED ${LIB_SOURCES})
+            endif()
+        else(WIN32)
+            add_library(${ModuleName} SHARED ${LIB_SOURCES})
+        endif(WIN32)
+        target_link_libraries(${ModuleName} ${DependsLib})
+    endif()
+endmacro()
 
 macro(ModuleInclude2 ModuleName ModulePath)
-    MESSAGE(STATUS "ModuleInclude2 ${ModuleName} ${ModulePath}")
+    message(STATUS "ModuleInclude2 ${ModuleName} ${ModulePath}")
 
-    IF (WIN32)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include/${ModuleName})
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include)
+    if (WIN32)
+        include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include/${ModuleName})
+        include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include)
 
-        LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/lib)
-    ELSE(WIN32)
-        IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/Find${ModuleName}.cmake)
-            INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/Find${ModuleName}.cmake)
-            INCLUDE_DIRECTORIES(${${ModuleName}_INCLUDE_DIRS})
-        ELSE()
-            MESSAGE(FATAL_ERROR "ModuleImport2 ${ModuleName} Find${ModuleName}.cmake not exist.")
-        ENDIF()
-    ENDIF(WIN32)
+        link_directories(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/lib)
+    else()
+        if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/Find${ModuleName}.cmake)
+            include(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/cmake/Find${ModuleName}.cmake)
+            include_directories(${${ModuleName}_INCLUDE_DIRS})
+        else()
+            message(FATAL_ERROR "ModuleImport2 ${ModuleName} Find${ModuleName}.cmake not exist.")
+        endif()
+    endif()
 
 endmacro(ModuleInclude2)
 
 macro(ModuleImport2 ModuleName ModulePath)
-    MESSAGE(STATUS "ModuleImport2 ${ModuleName} ${ModulePath}")
+    message(STATUS "ModuleImport2 ${ModuleName} ${ModulePath}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
         SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/thirdparty)
-        FOREACH(subdir ${SUBDIRS})
+        foreach(subdir ${SUBDIRS})
             ModuleInclude2(${ModuleName} ${ModulePath}/thirdparty/${subdir})
-        ENDFOREACH()
-    ENDIF()
+        endforeach()
+    endif()
 
     ModuleInclude2(${ModuleName} ${ModulePath})
-endmacro(ModuleImport2)
+endmacro()
 
 macro(ModuleImportAll ModulePath)
-    MESSAGE(STATUS "ModuleImportAll ${ModulePath}")
+    message(STATUS "ModuleImportAll ${ModulePath}")
 
-    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+    if (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
-        FOREACH(subdir ${SUBDIRS})
+        foreach(subdir ${SUBDIRS})
             MESSAGE(STATUS "ModuleImportAll ${subdir} ${ModulePath}/${subdir}")
 
             ModuleImport(${subdir} ${ModulePath}/${subdir})
-        ENDFOREACH()
-    ENDIF()
-endmacro(ModuleImportAll)
+        endforeach()
+    endif()
+endmacro()
 
 macro(ModuleConfigure ModuleName ModulePath)
-    IF (WIN32)
-        ADD_CUSTOM_TARGET(
+    if (WIN32)
+        add_custom_target(
             ${ModuleName}_configure
             COMMAND echo "${ModuleName}_config"
             WORKING_DIRECTORY ${ModulePath}
             )
-    ELSEIF (APPLE)
-        ADD_CUSTOM_TARGET(
+    elseif (APPLE)
+        add_custom_target(
             ${ModuleName}_configure
             COMMAND glibtoolize && aclocal && autoheader && autoconf && automake --add-missing && sh configure
             WORKING_DIRECTORY ${ModulePath}
             )
-    ELSEIF (UNIX)
-        ADD_CUSTOM_TARGET(
+    elseif (UNIX)
+        add_custom_target(
             ${ModuleName}_configure
             COMMAND libtoolize && aclocal && autoheader && autoconf && automake --add-missing && sh configure
             WORKING_DIRECTORY ${ModulePath}
             )
-    ENDIF()
+    endif()
 
-    ADD_DEPENDENCIES(${ModuleName} ${ModuleName}_configure)
-endmacro(ModuleConfigure)
+    add_dependencies(${ModuleName} ${ModuleName}_configure)
+endmacro()
 
 macro(ModuleCommand ModuleName ModulePath CommandLine)
-    MESSAGE(STATUS "ModuleCommand ${ModuleName} ${ModulePath} ${CommandLine}")
+    message(STATUS "ModuleCommand ${ModuleName} ${ModulePath} ${CommandLine}")
 
-    IF (WIN32)
-        ADD_CUSTOM_TARGET(
+    if (WIN32)
+        add_custom_target(
             ${ModuleName}_command
             COMMAND ${CommandLine}
             WORKING_DIRECTORY ${ModulePath}
             )
-    ELSEIF (APPLE)
-        ADD_CUSTOM_TARGET(
+    elseif (APPLE)
+        add_custom_target(
             ${ModuleName}_command
             COMMAND ${CommandLine}
             WORKING_DIRECTORY ${ModulePath}
             )
-    ELSEIF (UNIX)
-        ADD_CUSTOM_TARGET(
+    elseif (UNIX)
+        add_custom_target(
             ${ModuleName}_command
             COMMAND ${CommandLine}
             WORKING_DIRECTORY ${ModulePath}
             )
-    ENDIF()
+    endif()
 
-    ADD_DEPENDENCIES(${ModuleName} ${ModuleName}_command)
-endmacro(ModuleCommand)
+    add_dependencies(${ModuleName} ${ModuleName}_command)
+endmacro()
